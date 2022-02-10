@@ -1,0 +1,11 @@
+node_modules
+typings
+dist
+build
+coverage
+node_modules
+.DS_Store
+yarn.lock
+test/ts-use/tsconfig.tsbuildinfo
+test/tsconfig.tsbuildinfo
+package-lock.json

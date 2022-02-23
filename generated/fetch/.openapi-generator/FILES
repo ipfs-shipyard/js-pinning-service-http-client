@@ -1,0 +1,17 @@
+.gitignore
+.npmignore
+README.md
+package.json
+src/apis/PinsApi.ts
+src/apis/index.ts
+src/index.ts
+src/models/Failure.ts
+src/models/FailureError.ts
+src/models/Pin.ts
+src/models/PinResults.ts
+src/models/PinStatus.ts
+src/models/Status.ts
+src/models/TextMatchingStrategy.ts
+src/models/index.ts
+src/runtime.ts
+tsconfig.json

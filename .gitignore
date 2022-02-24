@@ -9,3 +9,5 @@ yarn.lock
 test/ts-use/tsconfig.tsbuildinfo
 test/tsconfig.tsbuildinfo
 package-lock.json
+*.bak
+.swc

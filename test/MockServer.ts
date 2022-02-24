@@ -77,7 +77,8 @@ export class MockServer {
       token: process.env.MOCK_PINNING_SERVER_SECRET
     })
 
-    return this._service
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+    return this._service as Application
   }
 
   private async server (port = this.port): Promise<Server> {

@@ -1,9 +1,9 @@
 
 // @ts-check
-export async function mochaGlobalSetup () {
+// export async function mochaGlobalSetup () {
 
-}
+// }
 
-export async function mochaGlobalTeardown () {
+// export async function mochaGlobalTeardown () {
 
-}
+// }

@@ -12,8 +12,21 @@
   "include": [
     "src",
     "generated",
-    "test/*.ts",
+    "test/**/*.ts",
     "generated",
-    "types/*.d.ts"
-  ]
+    "types/**/*.d.ts"
+  ],
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "emit": false,
+    "compiler": "typescript",
+    "compilerHost": false,
+    "compilerOptions": {
+      "module": "CommonJS"
+    },
+    "preferTsExts": true,
+    "pretty": true,
+    "swc": true
+  }
 }

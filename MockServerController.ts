@@ -91,14 +91,14 @@ class MockServerController {
 
     // To prevent duplicated cleanup, remove the process listeners on server close.
     this.server.on('close', () => {
-      process.off('beforeExit', this.shutdown)
-      process.off('SIGTERM', this.shutdown)
-      process.off('SIGINT', this.shutdown)
-      process.off('SIGHUP', this.shutdown)
     })
   }
 
   async shutdown () {
+    process.off('beforeExit', this.shutdown)
+    process.off('SIGTERM', this.shutdown)
+    process.off('SIGINT', this.shutdown)
+    process.off('SIGHUP', this.shutdown)
     await new Promise<void>((resolve, reject) => {
       this.server.close((err) => {
         if (err != null) {

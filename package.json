@@ -145,6 +145,8 @@
     "build:main": "aegir build -- -p tsconfig.json --suppress 6133@generated 6192@generated --stats",
     "build:docs": "aegir ts docs",
     "test": "run-s test:*",
+    "test:browser": "aegir test --target browser",
+    "test:webworker": "aegir test --target webworker",
     "test:electron": "aegir test --target electron-main",
     "test:node": "aegir test --target node --cov && npx nyc report",
     "pregen": "openapi-generator-cli validate -i https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/main/ipfs-pinning-service.yaml",
@@ -155,6 +157,7 @@
     "gen:ts": "openapi-generator-cli generate --generator-key ts"
   },
   "dependencies": {
+    "fetch-ponyfill": "^7.1.0",
     "patch-package": "^6.4.7"
   },
   "devDependencies": {
@@ -174,9 +177,7 @@
     "dotenvrc": "^1.0.1",
     "express": "^4.17.3",
     "express-promise-router": "^4.1.1",
-    "fetch-ponyfill": "^7.1.0",
     "mock-ipfs-pinning-service": "^0.4.0",
-    "node-fetch": "^2.6.1",
     "npm-run-all": "^4.1.5",
     "openapi-typescript": "^5.1.1",
     "portscanner": "^2.2.0",

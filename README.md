@@ -1,30 +1,36 @@
 ## @ipfs-shipyard/pinning-service-client@1.0.0
 
-This generator creates TypeScript/JavaScript client that utilizes fetch-api.
+This client was generated using [openapi-generator](https://github.com/OpenAPITools/openapi-generator) from the [ipfs pinning services API spec](https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/main/ipfs-pinning-service.yaml).
 
-### Building
+You can see the commands used to generate the client in the `gen:fetch` npm script.
 
-To build and compile the typescript sources to javascript use:
+### Usage
+
+This client only has a programmatic API at the moment (no CLI). You use it like so:
+
+```ts
+
+import { Configuration, PinsApi, Status } from '@ipfs-shipyard/pinning-service-client'
+import type { PinsGetRequest, PinResults } from '@ipfs-shipyard/pinning-service-client'
+
+const config = new Configuration({
+  basePath, // the URI for your pinning provider, e.g. `http://localhost:3000`
+  accessToken, // the secret token/key given to you by your pinning provider
+  // fetchApi: fetch, // You can pass your own fetchApi implementation, but we use fetch-ponyfill by default.
+})
+
+const client = new PinsApi(config)
+
+(async () => {
+  // Get 10 failed Pins
+  const pinsGetOptions: PinsGetRequest = {
+    limit: 10,
+    status: Status.Failed
+  }
+  const {count, results}: PinResults = await client.pinsGet(pinsGetOptions)
+
+  console.log(count, results)
+
+})()
+
 ```
-npm install
-npm run build
-```
-
-### Publishing
-
-First build the package then run ```npm publish```
-
-### Consuming
-
-navigate to the folder of your consuming project and run one of the following commands.
-
-_published:_
-
-```
-npm install @ipfs-shipyard/pinning-service-client@0.0.0 --save
-```
-
-_unPublished (not recommended):_
-
-```
-npm install PATH_TO_GENERATED_PACKAGE --save

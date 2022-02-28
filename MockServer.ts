@@ -125,8 +125,7 @@ export class MockServer {
         // MockServer.portsInUse.remove(this.port)
         MockServer.debug(`${Date.now()}: MockServer stopped listening on port ${port}`)
         delete this._server
-      }
-      if (err != null) {
+      } else if (err != null) {
         MockServer.error(err.name)
         MockServer.error(err.message)
         MockServer.error(err.stack)
@@ -148,7 +147,7 @@ export class MockServer {
   }
 
   private static debug (...logObjects: unknown[]) {
-    if (process.env.DEBUG != null) {
+    if (process.env.DEBUG != null && Number(process.env.DEBUG) !== 0) {
       MockServer.log('debug', ...logObjects)
     }
   }

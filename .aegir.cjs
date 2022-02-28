@@ -4,7 +4,9 @@
 require('ts-node').register({
   project: 'tsconfig.json',
 })
-const { MockServer } = require('./test/MockServer')
+
+const { MockServerController } = require('./MockServerController')
+
 
 /** @type {import('aegir').PartialOptions} */
 module.exports = {
@@ -20,19 +22,18 @@ module.exports = {
     bundlesizeMax: '44KB'
   },
   test: {
+    cov: false,
     async before () {
-
+      return new MockServerController()
     },
-    async beforeEach () {
-
-      // mockServer = new MockServer()
-      await mockServer.start()
-    },
-    async afterEach () {
-
-        await mockServer.stop()
-    },
-    async after () {
+    /**
+     *
+     * @param {GlobalOptions & TestOptions} _
+     * @param {MockServerController} controller
+     */
+    async after (_, controller) {
+      console.log('test after:')
+      await controller.shutdown()
 
     }
   }

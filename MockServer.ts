@@ -2,6 +2,8 @@ import { setup } from 'mock-ipfs-pinning-service'
 import type { Application } from 'express'
 import type { Server } from 'http'
 import portscanner from 'portscanner'
+import cors from 'cors'
+
 import('dotenvrc')
 
 export class MockServer {
@@ -16,7 +18,7 @@ export class MockServer {
 
   public basePath: string = ''
 
-  constructor () {
+  constructor (private readonly config: Parameters<typeof import('mock-ipfs-pinning-service')['setup']>[0] = { token: process.env.MOCK_PINNING_SERVER_SECRET }) {
     process.on('uncaughtException', MockServer.onEADDRINUSE)
   }
 
@@ -31,19 +33,19 @@ export class MockServer {
     if (server == null) {
       process.exit(1)
     }
-
+    const handler = this.cleanupSync.bind(this)
     // And you'll want to make sure you close the server when your process exits
-    process.on('beforeExit', this.cleanupSync)
-    process.on('SIGTERM', this.cleanupSync)
-    process.on('SIGINT', this.cleanupSync)
-    process.on('SIGHUP', this.cleanupSync)
+    process.on('beforeExit', handler)
+    process.on('SIGTERM', handler)
+    process.on('SIGINT', handler)
+    process.on('SIGHUP', handler)
 
     // To prevent duplicated cleanup, remove the process listeners on server close.
     server.on('close', () => {
-      process.off('beforeExit', this.cleanupSync)
-      process.off('SIGTERM', this.cleanupSync)
-      process.off('SIGINT', this.cleanupSync)
-      process.off('SIGHUP', this.cleanupSync)
+      process.off('beforeExit', handler)
+      process.off('SIGTERM', handler)
+      process.off('SIGINT', handler)
+      process.off('SIGHUP', handler)
     })
   }
 
@@ -59,6 +61,11 @@ export class MockServer {
    * Ensure the port set for this instance is not already in use by another MockServer
    */
   private async getAvailablePort (): Promise<number> {
+    // this.port = 3000
+
+    // this.setBasePath()
+
+    // return this.port
     return await new Promise((resolve, reject) => portscanner.findAPortNotInUse(3000, 3099, '127.0.0.1', (error, port) => {
       if (error != null) {
         return reject(error)
@@ -73,9 +80,12 @@ export class MockServer {
     if (this._service !== undefined) {
       return this._service
     }
-    this._service = await setup({
-      token: process.env.MOCK_PINNING_SERVER_SECRET
-    })
+    this._service = await setup(this.config)
+    // this._service = await setup({
+    //   token: process.env.MOCK_PINNING_SERVER_SECRET,
+    //   loglevel: 'debug'
+    // })
+    this._service.use(cors())
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     return this._service as Application
@@ -94,7 +104,7 @@ export class MockServer {
       MockServer.error('service error', err)
     })
     this._server = service.listen(await this.getAvailablePort(), () => {
-      MockServer.debug(`server running on port ${port}`)
+      MockServer.debug(`${Date.now()}: MockServer running on port ${this.port}`)
     })
 
     return this._server
@@ -109,10 +119,11 @@ export class MockServer {
   // Express server cleanup handling.
   private async cleanup (): Promise<void> {
     const server = await this.server()
+    const port = this.port
     server.close((err) => {
       if ((err == null) || (err as Error & { code: string })?.code === 'ERR_SERVER_NOT_RUNNING') {
         // MockServer.portsInUse.remove(this.port)
-        MockServer.debug(`server stopped listening on port ${this.port}`)
+        MockServer.debug(`${Date.now()}: MockServer stopped listening on port ${port}`)
         delete this._server
       }
       if (err != null) {

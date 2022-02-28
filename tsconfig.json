@@ -15,7 +15,7 @@
     "test/**/*.ts",
     "generated",
     "types/**/*.d.ts"
-  ],
+, "MockServer.ts"  ],
   "ts-node": {
     "transpileOnly": true,
     "files": true,

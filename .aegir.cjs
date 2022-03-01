@@ -5,7 +5,7 @@ require('ts-node').register({
   project: 'tsconfig.json',
 })
 
-const { MockServerController } = require('./MockServerController')
+const { MockServerController } = require('./test/MockServerController')
 
 
 /** @type {import('aegir').PartialOptions} */

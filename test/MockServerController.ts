@@ -1,28 +1,10 @@
 #!/usr/bin/env ts-node
 
-/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-console */
 import express from 'express'
 import { MockServer } from './MockServer'
 import Router from 'express-promise-router'
 import cors from 'cors'
-
-// const startMockServerController = async () => {
-//   /**
-//    * @type {MockServer}
-//    */
-//   const mockServer = null
-
-//   app.get('/stop', (req, res) => {
-//     res.send('Hello World!')
-//   })
-
-//   app.listen(port, () => {
-//     console.log(`Example app listening on port ${port}`)
-//   })
-// }
-
-// type ExpressGetHandler = Parameters<IRouterMatcher<'get'>>[1]
 
 class MockServerController {
   private readonly mockServers: MockServer[] = []
@@ -32,7 +14,7 @@ class MockServerController {
   private readonly port = 3000
   server: import('http').Server
   constructor () {
-    this.router.get<'/start', {port?: string}>('/start', async (req, res, next) => {
+    this.router.get<'/start', {port?: string}>('/start', async (req, res, next) => { // eslint-disable-line @typescript-eslint/no-misused-promises
       const { port } = req.params
 
       let mockServer: MockServer | null = null
@@ -57,7 +39,7 @@ class MockServerController {
     /**
      * A client will request to shut down it's mockServer by port, which it should have received upon calling '/start'
      */
-    this.router.get<'/stop/:port', {port: string}>('/stop/:port', async (req, res, next) => {
+    this.router.get<'/stop/:port', {port: string}>('/stop/:port', async (req, res, next) => { // eslint-disable-line @typescript-eslint/no-misused-promises
       const { port } = req.params
 
       const mockServer = this.mockServers.find((mockS) => mockS.basePath.includes(port))
@@ -84,21 +66,27 @@ class MockServerController {
     })
 
     // And you'll want to make sure you close the server when your process exits
-    process.on('beforeExit', this.shutdown)
-    process.on('SIGTERM', this.shutdown)
-    process.on('SIGINT', this.shutdown)
-    process.on('SIGHUP', this.shutdown)
+    process.on('beforeExit', this.shutdownSync)
+    process.on('SIGTERM', this.shutdownSync)
+    process.on('SIGINT', this.shutdownSync)
+    process.on('SIGHUP', this.shutdownSync)
 
     // To prevent duplicated cleanup, remove the process listeners on server close.
     this.server.on('close', () => {
     })
   }
 
+  private shutdownSync () {
+    this.shutdown().catch((err) => {
+      console.error(err)
+    })
+  }
+
   async shutdown () {
-    process.off('beforeExit', this.shutdown)
-    process.off('SIGTERM', this.shutdown)
-    process.off('SIGINT', this.shutdown)
-    process.off('SIGHUP', this.shutdown)
+    process.off('beforeExit', this.shutdownSync)
+    process.off('SIGTERM', this.shutdownSync)
+    process.off('SIGINT', this.shutdownSync)
+    process.off('SIGHUP', this.shutdownSync)
     await new Promise<void>((resolve, reject) => {
       this.server.close((err) => {
         if (err != null) {

@@ -131,6 +131,7 @@
     ]
   },
   "scripts": {
+    "ci:test": "run-s test:*",
     "dep-check": "aegir dep-check src/**/*.ts test/**/*.ts generated/**/*.ts",
     "fix": "run-s fix:*",
     "fix:gen": "./npm-scripts/fix/gen.sh",

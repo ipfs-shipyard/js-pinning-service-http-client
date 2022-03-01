@@ -5,6 +5,7 @@ main() {
   # local FILES
   # FILES=()
   local SED_BACKUPS=()
+  local SED_ERROR=0
 
   # remove openapi-generator's package and tsconfig json files
   for PKG_JSON in generated/*/package.json; do
@@ -24,14 +25,22 @@ main() {
       if test -e $FILE_PATH; then
         # Replace all occurrances of "&lt;" with "<"
         # Replace all occurrances of "&gt;" with ">"
-        sed -i .bak -e 's/&lt\;/\</g' -e 's/&gt\;/\>/g' $FILE_PATH
+        sed -i .bak -e 's/&lt\;/\</g' -e 's/&gt\;/\>/g' $FILE_PATH || SED_ERROR=1
         SED_BACKUPS+=( $FILE_PATH.bak )
       fi
     done
   done
 
+  echo -e "\$SED_ERROR: $SED_ERROR \n"
+  if ((SED_ERROR)); then
+    echo "Error when replacing text, not deleting the backup files, please investigate: ${SED_BACKUPS[@]}"
+    return 1
+  else
+    rm ${SED_BACKUPS[@]}
+  fi
 
-  echo "SED_BACKUPS = ${SED_BACKUPS[@]}"
+
+  # echo "SED_BACKUPS = ${SED_BACKUPS[@]}"
   # test build.. if build succeeds, remove backup file.
 
 }

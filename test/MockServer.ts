@@ -3,18 +3,15 @@ import type { Application } from 'express'
 import type { Server } from 'http'
 import portscanner from 'portscanner'
 import cors from 'cors'
+import { logger } from './logger'
 
 import('dotenvrc')
 
 export class MockServer {
   private _server: Server | undefined = undefined
 
-  private port = Number(process.env.MOCK_PINNING_SERVER_PORT ?? 3000)
+  private port: string = '3001'
   private _service: Application | undefined = undefined
-
-  /**
-   * This set helps us support parallel tests by not attempting to start up multiple MockServer's on the same port
-   */
 
   public basePath: string = ''
 
@@ -27,7 +24,7 @@ export class MockServer {
     try {
       server = await this.server(port)
     } catch (err) {
-      MockServer.error('start error', err)
+      logger.error('start error', err)
     }
 
     if (server == null) {
@@ -53,26 +50,39 @@ export class MockServer {
     await this.cleanup()
   }
 
-  private setBasePath (): void {
-    this.basePath = `http://127.0.0.1:${this.port}`
+  private async server (port = this.port): Promise<Server> {
+    if (this._server !== undefined) {
+      return this._server
+    }
+    if (port != null && port !== this.port) {
+      this.port = port
+      this.setBasePath()
+    } else {
+      port = await this.getAvailablePort()
+    }
+    const service = await this.service()
+
+    service.on('error', (err) => {
+      logger.error('service error', err)
+    })
+    this._server = service.listen(port, () => {
+      logger.debug(`${Date.now()}: MockServer running on port ${port}`)
+    })
+
+    return this._server
   }
 
   /**
    * Ensure the port set for this instance is not already in use by another MockServer
    */
-  private async getAvailablePort (): Promise<number> {
-    // this.port = 3000
-
-    // this.setBasePath()
-
-    // return this.port
+  private async getAvailablePort (): Promise<string> {
     return await new Promise((resolve, reject) => portscanner.findAPortNotInUse(3000, 3099, '127.0.0.1', (error, port) => {
       if (error != null) {
         return reject(error)
       }
-      this.port = port
+      this.port = port.toString()
       this.setBasePath()
-      resolve(port)
+      resolve(this.port)
     }))
   }
 
@@ -81,38 +91,22 @@ export class MockServer {
       return this._service
     }
     this._service = await setup(this.config)
-    // this._service = await setup({
-    //   token: process.env.MOCK_PINNING_SERVER_SECRET,
-    //   loglevel: 'debug'
-    // })
+
     this._service.use(cors())
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    return this._service as Application
+    return this._service
   }
 
-  private async server (port = this.port): Promise<Server> {
-    if (this._server !== undefined) {
-      return this._server
+  private setBasePath (): void {
+    if (this.port == null) {
+      throw new Error('Attempted to set basePath before setting this.port.')
     }
-    if (port !== this.port) {
-      this.port = port
-    }
-    const service = await this.service()
-
-    service.on('error', (err) => {
-      MockServer.error('service error', err)
-    })
-    this._server = service.listen(await this.getAvailablePort(), () => {
-      MockServer.debug(`${Date.now()}: MockServer running on port ${this.port}`)
-    })
-
-    return this._server
+    this.basePath = `http://127.0.0.1:${this.port}`
   }
 
   private cleanupSync (): void {
     void this.cleanup().then(() => {
-      MockServer.debug('cleaned up')
+      logger.debug('cleaned up')
     })
   }
 
@@ -123,43 +117,24 @@ export class MockServer {
     server.close((err) => {
       if ((err == null) || (err as Error & { code: string })?.code === 'ERR_SERVER_NOT_RUNNING') {
         // MockServer.portsInUse.remove(this.port)
-        MockServer.debug(`${Date.now()}: MockServer stopped listening on port ${port}`)
+        logger.debug(`${Date.now()}: MockServer stopped listening on port ${port}`)
         delete this._server
       } else if (err != null) {
-        MockServer.error(err.name)
-        MockServer.error(err.message)
-        MockServer.error(err.stack)
+        throw err
       }
     })
   }
 
   private static onEADDRINUSE (err: Error & { code: string }) {
     if (err.code === 'EADDRINUSE') {
-      this.error('Unexpected conflict with port usage')
+      logger.error('Unexpected conflict with port usage')
     } else {
-      this.error('CAUGHT UNKNOWN ERROR')
-      this.error(err.name)
-      this.error(err.code)
-      this.error(err.message)
-      this.error(err.stack)
+      logger.error('CAUGHT UNKNOWN ERROR')
+      logger.error(err.name)
+      logger.error(err.code)
+      logger.error(err.message)
+      logger.error(err.stack)
     }
-    process.exit(233)
-  }
-
-  private static debug (...logObjects: unknown[]) {
-    if (process.env.DEBUG != null && Number(process.env.DEBUG) !== 0) {
-      MockServer.log('debug', ...logObjects)
-    }
-  }
-
-  private static error (...logObjects: unknown[]) {
-    if (process.env.DEBUG != null) {
-      MockServer.log('error', ...logObjects)
-    }
-  }
-
-  private static log (type: keyof typeof console & 'log' | 'debug' | 'error' | 'warn' | 'info' | 'trace', ...logObjects: unknown[]) {
-    // eslint-disable-next-line no-console
-    console[type](...logObjects)
+    process.exit(1)
   }
 }

@@ -5,11 +5,10 @@ import { Configuration, PinsApi, Status } from '../src'
 import type { Pin } from '../src'
 import fetchPonyfill from 'fetch-ponyfill'
 
-// export default async (setup: () => Promise<{fetch: GlobalFetch['fetch']}>) => {
 const { fetch } = fetchPonyfill()
 
 let Config = new Configuration({
-  basePath: `http://127.0.0.1:${process.env.MOCK_PINNING_SERVER_PORT ?? '3000'}`,
+  basePath: 'http://127.0.0.1:3000',
   // fetchApi: fetch,
   accessToken: process.env.MOCK_PINNING_SERVER_SECRET
 })

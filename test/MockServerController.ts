@@ -1,11 +1,12 @@
-#!/usr/bin/env ts-node
-
-/* eslint-disable no-console */
 import express from 'express'
 import { MockServer } from './MockServer'
 import Router from 'express-promise-router'
 import cors from 'cors'
+import { logger } from './logger'
 
+/**
+ * MockServerController stands up a server on port 3000
+ */
 class MockServerController {
   private readonly mockServers: MockServer[] = []
   private readonly app = express()
@@ -53,7 +54,7 @@ class MockServerController {
           next(error)
         }
       } else {
-        console.log('Could not get mockserver')
+        logger.error('Could not get mockserver')
         throw new Error(`MockServer at port ${port} could not be found`)
       }
     })
@@ -62,7 +63,7 @@ class MockServerController {
     this.app.use(this.router)
 
     this.server = this.app.listen(this.port, () => {
-      console.log(`MockServerController listening on port ${this.port}`)
+      logger.debug(`MockServerController listening on port ${this.port}`)
     })
 
     // And you'll want to make sure you close the server when your process exits
@@ -71,18 +72,19 @@ class MockServerController {
     process.on('SIGINT', this.shutdownSync)
     process.on('SIGHUP', this.shutdownSync)
 
-    // To prevent duplicated cleanup, remove the process listeners on server close.
     this.server.on('close', () => {
+      logger.debug(`MockServerController stopped listening on ${this.port}`)
     })
   }
 
   private shutdownSync () {
     this.shutdown().catch((err) => {
-      console.error(err)
+      logger.error(err)
     })
   }
 
   async shutdown () {
+    // To prevent duplicated cleanup, remove the process listeners on server close.
     process.off('beforeExit', this.shutdownSync)
     process.off('SIGTERM', this.shutdownSync)
     process.off('SIGINT', this.shutdownSync)
@@ -90,10 +92,10 @@ class MockServerController {
     await new Promise<void>((resolve, reject) => {
       this.server.close((err) => {
         if (err != null) {
-          console.error('Unexpected error when shutting down the MockServerController')
-          console.error(err)
+          logger.error('Unexpected error when shutting down the MockServerController')
+          logger.error(err)
         } else {
-          console.log(`MockServerController stopped listening on port ${this.port}`)
+          logger.debug(`MockServerController stopped listening on port ${this.port}`)
         }
         resolve()
       })
@@ -102,22 +104,17 @@ class MockServerController {
       try {
         await mockS.stop()
       } catch (err) {
-        console.error(`Unexpected error when attempting to shutdown mock server at ${mockS.basePath}`)
-        console.error(err)
+        logger.error(`Unexpected error when attempting to shutdown mock server at ${mockS.basePath}`)
+        logger.error(err)
       }
     }
   }
 
-  // async startMockServer (req: {params: { port: number}}, res: {basePath: string, accessToken: string}, next: unknown) {
-
-  // }
-
   private async startIpfsPinningServer (port?: string) {
     const mockServer = new MockServer({
       token: process.env.MOCK_PINNING_SERVER_SECRET
-      // loglevel: 'info'
     })
-    await mockServer.start(Number(port))
+    await mockServer.start(port)
 
     return mockServer
   }

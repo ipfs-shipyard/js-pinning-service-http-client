@@ -150,7 +150,7 @@
     "test:webworker": "aegir test --target webworker",
     "test:electron": "aegir test --target electron-main",
     "test:node": "aegir test --target node --cov && npx nyc report",
-    "pregen": "openapi-generator-cli validate -i https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/main/ipfs-pinning-service.yaml",
+    "pregen": "openapi-generator-cli validate -i https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/v1.0.0/ipfs-pinning-service.yaml",
     "gen": "run-p gen:fetch",
     "postgen": "run-s fix:gen",
     "gen:fetch": "openapi-generator-cli generate --generator-key fetch",

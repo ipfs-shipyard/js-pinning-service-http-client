@@ -7,7 +7,7 @@
     "storageDir": "",
     "generators": {
       "node": {
-        "inputSpec": "https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/main/ipfs-pinning-service.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/v1.0.0/ipfs-pinning-service.yaml",
         "strictSpec": true,
         "apiNameSuffix": "",
         "generatorName": "typescript-node",
@@ -27,7 +27,7 @@
         }
       },
       "fetch": {
-        "inputSpec": "https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/main/ipfs-pinning-service.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/v1.0.0/ipfs-pinning-service.yaml",
         "strictSpec": true,
         "apiNameSuffix": "",
         "generatorName": "typescript-fetch",
@@ -47,7 +47,7 @@
         }
       },
       "ts": {
-        "inputSpec": "https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/main/ipfs-pinning-service.yaml",
+        "inputSpec": "https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/v1.0.0/ipfs-pinning-service.yaml",
         "strictSpec": true,
         "apiNameSuffix": "",
         "generatorName": "typescript",

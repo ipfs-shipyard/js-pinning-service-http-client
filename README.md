@@ -25,7 +25,7 @@ const client = new PinsApi(config)
   // Get 10 failed Pins
   const pinsGetOptions: PinsGetRequest = {
     limit: 10,
-    status: Status.Failed
+    status: new Set([Status.Failed]) // requires a set, and not an array
   }
   const {count, results}: PinResults = await client.pinsGet(pinsGetOptions)
 

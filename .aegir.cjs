@@ -32,9 +32,7 @@ module.exports = {
      * @param {MockServerController} controller
      */
     async after (_, controller) {
-      console.log('test after:')
       await controller.shutdown()
-
     }
   }
 }

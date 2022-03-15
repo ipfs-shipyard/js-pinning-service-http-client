@@ -12,3 +12,6 @@ package-lock.json
 *.bak
 .swc
 .envrc
+.nyc_output
+generated/fetch/package.json
+generated/fetch/tsconfig.json

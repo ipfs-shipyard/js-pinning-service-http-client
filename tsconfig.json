@@ -6,17 +6,25 @@
     "module": "ES2020",
     "typeRoots": [
       "./types",
-      "./node_modules/@types"
+      "./node_modules/@types",
+      "./generated/fetch/dist"
     ],
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
   "include": [
     "src",
-    "generated",
+    "test",
     "test/**/*.ts",
-    "generated",
-    "types/**/*.d.ts"
-, "MockServer.ts"  ],
+    "types/**/*.d.ts",
+    "MockServer.ts",
+    "./generated/fetch/dist"
+  ],
+  "exclude": [
+    "generated"
+  ],
   "ts-node": {
     "transpileOnly": true,
     "files": true,

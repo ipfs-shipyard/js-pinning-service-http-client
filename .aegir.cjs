@@ -24,14 +24,19 @@ module.exports = {
   test: {
     cov: false,
     async before () {
-      return new MockServerController()
+      return {
+        env: {
+          MOCK_PINNING_SERVER_SECRET: 'ci',
+        },
+        controller: new MockServerController(),
+      }
     },
     /**
      *
      * @param {GlobalOptions & TestOptions} _
      * @param {MockServerController} controller
      */
-    async after (_, controller) {
+    async after (_, {controller}) {
       await controller.shutdown()
     }
   }

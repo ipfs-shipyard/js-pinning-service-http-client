@@ -5,7 +5,13 @@ import portscanner from 'portscanner'
 import cors from 'cors'
 import { logger } from './logger'
 
-import('dotenvrc')
+try {
+  import('dotenvrc')
+} catch (err) {
+  // no dotenvrc.. that's okay
+  // eslint-disable-next-line no-console
+  console.warn('No .envrc file found; assuming CI environment. If not: You should copy .envrc-copy and set your environment variables.')
+}
 
 export class MockServer {
   private _server: Server | undefined = undefined

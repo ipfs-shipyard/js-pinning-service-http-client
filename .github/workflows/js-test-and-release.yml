@@ -16,24 +16,13 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: lts/*
-    - uses: ipfs/aegir/actions/cache-node-modules@master
+    - name: Install dependencies
+      run: npm install
     - run: npm run gen
-    - run: npm run --if-present lint
-    - run: npm run --if-present dep-check
-
-  cache-generated:
-    needs: check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache generated files
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-generated-files
-        with:
-          path: generated
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('generated/**') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
+    - name: lint
+      run: npm run --if-present lint
+    - name: dependency check
+      run: npm run --if-present dep-check
 
   test-node:
     needs: check
@@ -48,7 +37,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
-      - uses: ipfs/aegir/actions/cache-node-modules@master
       - run: npm run --if-present test:node
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -63,7 +51,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
       - run: npm run --if-present test:chrome
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -78,7 +65,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
       - run: npm run --if-present test:chrome-webworker
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -93,7 +79,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
       - run: npm run --if-present test:firefox
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -108,7 +93,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
       - run: npm run --if-present test:firefox-webworker
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -123,7 +107,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
       - run: npx xvfb-maybe npm run --if-present test:electron-main
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -138,7 +121,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
       - run: npx xvfb-maybe npm run --if-present test:electron-renderer
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -157,7 +139,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
       - uses: ipfs/aegir/actions/docker-login@master
         with:
           docker-token: ${{ secrets.DOCKER_TOKEN }}

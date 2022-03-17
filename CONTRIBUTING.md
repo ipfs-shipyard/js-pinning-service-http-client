@@ -1,30 +1,9 @@
-## @ipfs-shipyard/pinning-service-client@1.0.0
+# Contributing guidelines
 
-This generator creates TypeScript/JavaScript client that utilizes fetch-api.
+IPFS as a project, including js-ipfs and all of its modules, follows the [standard IPFS Community contributing guidelines](https://github.com/ipfs/community/blob/master/CONTRIBUTING.md).
 
-### Building
+We also adhere to the [IPFS JavaScript Community contributing guidelines](https://github.com/ipfs/community/blob/master/CONTRIBUTING_JS.md) which provide additional information of how to collaborate and contribute in the JavaScript implementation of IPFS.
 
-To build and compile the typescript sources to javascript use:
-```
-npm install
-npm run build
-```
+We appreciate your time and attention for going over these. Please open an issue on [ipfs/community](https://github.com/ipfs/community) if you have any question.
 
-### Publishing
-
-First build the package then run ```npm publish```
-
-### Consuming
-
-navigate to the folder of your consuming project and run one of the following commands.
-
-_published:_
-
-```
-npm install @ipfs-shipyard/pinning-service-client@0.0.0 --save
-```
-
-_unPublished (not recommended):_
-
-```
-npm install PATH_TO_GENERATED_PACKAGE --save
+Thank you.

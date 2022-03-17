@@ -1,0 +1,235 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>generated/fetch/dist/src/models/Status | ipfs-pinning-service - vundefined</title>
+	<meta name="description" content="Documentation for ipfs-pinning-service - vundefined">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">ipfs-pinning-service - vundefined</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">ipfs-pinning-service - vundefined</a>
+				</li>
+				<li>
+					<a href="generated_fetch_dist_src_models_Status.html">generated/fetch/dist/src/models/Status</a>
+				</li>
+			</ul>
+			<h1>Module generated/fetch/dist/src/models/Status</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>IPFS Pinning Service API</p>
+						<a href="#about-this-spec-the-ipfs-pinning-service-api-is-intended-to-be-an-implementation-agnostic-apix3a---for-use-and-implementation-by-pinning-service-providers---for-use-in-client-mode-by-ipfs-nodes-and-gui-based-applications--gt-note-while-ready-for-implementation-this-spec-is-still-a-work-in-progress-🏗️--your-input-and-feedback-are-welcome-and-valuable-as-we-develop-this-api-spec-please-join-the-design-discussion-at-githubcomipfspinning-services-api-spec---schemas-this-section-describes-the-most-important-object-types-and-conventions--a-full-list-of-fields-and-schemas-can-be-found-in-the-schemas-section-of-the-yaml-file---identifiers--cid-content-identifier-cid-points-at-the-root-of-a-dag-that-is-pinned-recursively--requestid-unique-identifier-of-a-pin-request--when-a-pin-is-created-the-service-responds-with-unique-requestid-that-can-be-later-used-for-pin-removal-when-the-same-cid-is-pinned-again-a-different-requestid-is-returned-to-differentiate-between-those-pin-requests--service-implementation-should-use-uuid-hashaccesstokenpinpinstatuscreated-or-any-other-opaque-identifier-that-provides-equally-strong-protection-against-race-conditions---objects--pin-object----the-pin-object-is-a-representation-of-a-pin-request--it-includes-the-cid-of-data-to-be-pinned-as-well-as-optional-metadata-in-name-origins-and-meta---pin-status-response----the-pinstatus-object-is-a-representation-of-the-current-state-of-a-pinning-operation-it-includes-the-original-pin-object-along-with-the-current-status-and-globally-unique-requestid-of-the-entire-pinning-request-which-can-be-used-for-future-status-checks-and-management-addresses-in-the-delegates-array-are-peers-delegated-by-the-pinning-service-for-facilitating-direct-file-transfers-more-details-in-the-provider-hints-section-any-additional-vendor-specific-information-is-returned-in-optional-info---the-pin-lifecycle-----creating-a-new-pin-object-the-user-sends-a-pin-object-to-post-pins-and-receives-a-pinstatus-response---requestid-in-pinstatus-is-the-identifier-of-the-pin-operation-which-can-can-be-used-for-checking-status-and-removing-the-pin-in-the-future---status-in-pinstatus-indicates-the-current-state-of-a-pin---checking-status-of-in-progress-pinning-status-in-pinstatus-may-indicate-a-pending-state-queued-or-pinning-this-means-the-data-behind-pincid-was-not-found-on-the-pinning-service-and-is-being-fetched-from-the-ipfs-network-at-large-which-may-take-time--in-this-case-the-user-can-periodically-check-pinning-progress-via-get-pinsrequestid-until-pinning-is-successful-or-the-user-decides-to-remove-the-pending-pin---replacing-an-existing-pin-object-the-user-can-replace-an-existing-pin-object-via-post-pinsrequestid-this-is-a-shortcut-for-removing-a-pin-object-identified-by-requestid-and-creating-a-new-one-in-a-single-api-call-that-protects-against-undesired-garbage-collection-of-blocks-common-to-both-pins-useful-when-updating-a-pin-representing-a-huge-dataset-where-most-of-blocks-did-not-change-the-new-pin-object-requestid-is-returned-in-the-pinstatus-response-the-old-pin-object-is-deleted-automatically---removing-a-pin-object-a-pin-object-can-be-removed-via-delete-pinsrequestid----provider-hints-a-pinning-service-will-use-the-dht-and-other-discovery-methods-to-locate-pinned-content-however-it-is-a-good-practice-to-provide-additional-provider-hints-to-speed-up-the-discovery-phase-and-start-the-transfer-immediately-especially-if-a-client-has-the-data-in-their-own-datastore-or-already-knows-of-other-providers--the-most-common-scenario-is-a-client-putting-its-own-ipfs-node39s-multiaddrs-in-pinorigins--and-then-attempt-to-connect-to-every-multiaddr-returned-by-a-pinning-service-in-pinstatusdelegates-to-initiate-transfer--at-the-same-time-a-pinning-service-will-try-to-connect-to-multiaddrs-provided-by-the-client-in-pinorigins--this-ensures-data-transfer-starts-immediately-without-waiting-for-provider-discovery-over-dht-and-mutual-direct-dial-between-a-client-and-a-service-works-around-peer-routing-issues-in-restrictive-network-topologies-such-as-nats-firewalls-etc--note-connections-to-multiaddrs-in-origins-and-delegates-arrays-should-be-attempted-in-best-effort-fashion-and-dial-failure-should-not-fail-the-pinning-operation-when-unable-to-act-on-explicit-provider-hints-dht-and-other-discovery-methods-should-be-used-as-a-fallback-by-a-pinning-service--note-all-multiaddrs-must-end-with-p2ppeerid-and-should-be-fully-resolved-and-confirmed-to-be-dialable-from-the-public-internet-avoid-sending-addresses-from-local-networks---custom-metadata-pinning-services-are-encouraged-to-add-support-for-additional-features-by-leveraging-the-optional-pinmeta-and-pinstatusinfo-fields-while-these-attributes-can-be-application--or-vendor-specific-we-encourage-the-community-at-large-to-leverage-these-attributes-as-a-sandbox-to-come-up-with-conventions-that-could-become-part-of-future-revisions-of-this-api--pin-metadata-string-keys-and-values-passed-in-pinmeta-are-persisted-with-the-pin-object--potential-uses---pinmetaapp_id-attaching-a-unique-identifier-to-pins-created-by-an-app-enables-filtering-pins-per-app-via-metaquotapp_idquotltuuidgt---pinmetavendor_policy-vendor-specific-policy-for-example-which-region-to-use-how-many-copies-to-keep--note-that-it-is-ok-for-a-client-to-omit-or-ignore-these-optional-attributes-doing-so-should-not-impact-the-basic-pinning-functionality---pin-status-info-additional-pinstatusinfo-can-be-returned-by-pinning-service--potential-uses---pinstatusinfostatus_details-more-info-about-the-current-status-queue-position-percentage-of-transferred-data-summary-of-where-data-is-stored-etc-when-pinstatusstatusfailed-it-could-provide-a-reason-why-a-pin-operation-failed-eg-lack-of-funds-dag-too-big-etc---pinstatusinfodag_size-the-size-of-pinned-data-along-with-dag-overhead---pinstatusinforaw_size-the-size-of-data-without-dag-overhead-eg-unixfs---pinstatusinfopinned_until-if-vendor-supports-time-bound-pins-this-could-indicate-when-the-pin-will-expire---pagination-and-filtering-pin-objects-can-be-listed-by-executing-get-pins-with-optional-parameters----when-no-filters-are-provided-the-endpoint-will-return-a-small-batch-of-the-10-most-recently-created-items-from-the-latest-to-the-oldest---the-number-of-returned-items-can-be-adjusted-with-the-limit-parameter-implicit-default-is-10---if-the-value-in-pinresultscount-is-bigger-than-the-length-of-pinresultsresults-the-client-can-infer-there-are-more-results-that-can-be-queried---to-read-more-items-pass-the-before-filter-with-the-timestamp-from-pinstatuscreated-found-in-the-oldest-item-in-the-current-batch-of-results-repeat-to-read-all-results---returned-results-can-be-fine-tuned-by-applying-optional-after-cid-name-status-or-meta-filters--gt-note-pagination-by-the-created-timestamp-requires-each-value-to-be-globally-unique-any-future-considerations-to-add-support-for-bulk-creation-must-account-for-this" id="about-this-spec-the-ipfs-pinning-service-api-is-intended-to-be-an-implementation-agnostic-apix3a---for-use-and-implementation-by-pinning-service-providers---for-use-in-client-mode-by-ipfs-nodes-and-gui-based-applications--gt-note-while-ready-for-implementation-this-spec-is-still-a-work-in-progress-🏗️--your-input-and-feedback-are-welcome-and-valuable-as-we-develop-this-api-spec-please-join-the-design-discussion-at-githubcomipfspinning-services-api-spec---schemas-this-section-describes-the-most-important-object-types-and-conventions--a-full-list-of-fields-and-schemas-can-be-found-in-the-schemas-section-of-the-yaml-file---identifiers--cid-content-identifier-cid-points-at-the-root-of-a-dag-that-is-pinned-recursively--requestid-unique-identifier-of-a-pin-request--when-a-pin-is-created-the-service-responds-with-unique-requestid-that-can-be-later-used-for-pin-removal-when-the-same-cid-is-pinned-again-a-different-requestid-is-returned-to-differentiate-between-those-pin-requests--service-implementation-should-use-uuid-hashaccesstokenpinpinstatuscreated-or-any-other-opaque-identifier-that-provides-equally-strong-protection-against-race-conditions---objects--pin-object----the-pin-object-is-a-representation-of-a-pin-request--it-includes-the-cid-of-data-to-be-pinned-as-well-as-optional-metadata-in-name-origins-and-meta---pin-status-response----the-pinstatus-object-is-a-representation-of-the-current-state-of-a-pinning-operation-it-includes-the-original-pin-object-along-with-the-current-status-and-globally-unique-requestid-of-the-entire-pinning-request-which-can-be-used-for-future-status-checks-and-management-addresses-in-the-delegates-array-are-peers-delegated-by-the-pinning-service-for-facilitating-direct-file-transfers-more-details-in-the-provider-hints-section-any-additional-vendor-specific-information-is-returned-in-optional-info---the-pin-lifecycle-----creating-a-new-pin-object-the-user-sends-a-pin-object-to-post-pins-and-receives-a-pinstatus-response---requestid-in-pinstatus-is-the-identifier-of-the-pin-operation-which-can-can-be-used-for-checking-status-and-removing-the-pin-in-the-future---status-in-pinstatus-indicates-the-current-state-of-a-pin---checking-status-of-in-progress-pinning-status-in-pinstatus-may-indicate-a-pending-state-queued-or-pinning-this-means-the-data-behind-pincid-was-not-found-on-the-pinning-service-and-is-being-fetched-from-the-ipfs-network-at-large-which-may-take-time--in-this-case-the-user-can-periodically-check-pinning-progress-via-get-pinsrequestid-until-pinning-is-successful-or-the-user-decides-to-remove-the-pending-pin---replacing-an-existing-pin-object-the-user-can-replace-an-existing-pin-object-via-post-pinsrequestid-this-is-a-shortcut-for-removing-a-pin-object-identified-by-requestid-and-creating-a-new-one-in-a-single-api-call-that-protects-against-undesired-garbage-collection-of-blocks-common-to-both-pins-useful-when-updating-a-pin-representing-a-huge-dataset-where-most-of-blocks-did-not-change-the-new-pin-object-requestid-is-returned-in-the-pinstatus-response-the-old-pin-object-is-deleted-automatically---removing-a-pin-object-a-pin-object-can-be-removed-via-delete-pinsrequestid----provider-hints-a-pinning-service-will-use-the-dht-and-other-discovery-methods-to-locate-pinned-content-however-it-is-a-good-practice-to-provide-additional-provider-hints-to-speed-up-the-discovery-phase-and-start-the-transfer-immediately-especially-if-a-client-has-the-data-in-their-own-datastore-or-already-knows-of-other-providers--the-most-common-scenario-is-a-client-putting-its-own-ipfs-node39s-multiaddrs-in-pinorigins--and-then-attempt-to-connect-to-every-multiaddr-returned-by-a-pinning-service-in-pinstatusdelegates-to-initiate-transfer--at-the-same-time-a-pinning-service-will-try-to-connect-to-multiaddrs-provided-by-the-client-in-pinorigins--this-ensures-data-transfer-starts-immediately-without-waiting-for-provider-discovery-over-dht-and-mutual-direct-dial-between-a-client-and-a-service-works-around-peer-routing-issues-in-restrictive-network-topologies-such-as-nats-firewalls-etc--note-connections-to-multiaddrs-in-origins-and-delegates-arrays-should-be-attempted-in-best-effort-fashion-and-dial-failure-should-not-fail-the-pinning-operation-when-unable-to-act-on-explicit-provider-hints-dht-and-other-discovery-methods-should-be-used-as-a-fallback-by-a-pinning-service--note-all-multiaddrs-must-end-with-p2ppeerid-and-should-be-fully-resolved-and-confirmed-to-be-dialable-from-the-public-internet-avoid-sending-addresses-from-local-networks---custom-metadata-pinning-services-are-encouraged-to-add-support-for-additional-features-by-leveraging-the-optional-pinmeta-and-pinstatusinfo-fields-while-these-attributes-can-be-application--or-vendor-specific-we-encourage-the-community-at-large-to-leverage-these-attributes-as-a-sandbox-to-come-up-with-conventions-that-could-become-part-of-future-revisions-of-this-api--pin-metadata-string-keys-and-values-passed-in-pinmeta-are-persisted-with-the-pin-object--potential-uses---pinmetaapp_id-attaching-a-unique-identifier-to-pins-created-by-an-app-enables-filtering-pins-per-app-via-metaquotapp_idquotltuuidgt---pinmetavendor_policy-vendor-specific-policy-for-example-which-region-to-use-how-many-copies-to-keep--note-that-it-is-ok-for-a-client-to-omit-or-ignore-these-optional-attributes-doing-so-should-not-impact-the-basic-pinning-functionality---pin-status-info-additional-pinstatusinfo-can-be-returned-by-pinning-service--potential-uses---pinstatusinfostatus_details-more-info-about-the-current-status-queue-position-percentage-of-transferred-data-summary-of-where-data-is-stored-etc-when-pinstatusstatusfailed-it-could-provide-a-reason-why-a-pin-operation-failed-eg-lack-of-funds-dag-too-big-etc---pinstatusinfodag_size-the-size-of-pinned-data-along-with-dag-overhead---pinstatusinforaw_size-the-size-of-data-without-dag-overhead-eg-unixfs---pinstatusinfopinned_until-if-vendor-supports-time-bound-pins-this-could-indicate-when-the-pin-will-expire---pagination-and-filtering-pin-objects-can-be-listed-by-executing-get-pins-with-optional-parameters----when-no-filters-are-provided-the-endpoint-will-return-a-small-batch-of-the-10-most-recently-created-items-from-the-latest-to-the-oldest---the-number-of-returned-items-can-be-adjusted-with-the-limit-parameter-implicit-default-is-10---if-the-value-in-pinresultscount-is-bigger-than-the-length-of-pinresultsresults-the-client-can-infer-there-are-more-results-that-can-be-queried---to-read-more-items-pass-the-before-filter-with-the-timestamp-from-pinstatuscreated-found-in-the-oldest-item-in-the-current-batch-of-results-repeat-to-read-all-results---returned-results-can-be-fine-tuned-by-applying-optional-after-cid-name-status-or-meta-filters--gt-note-pagination-by-the-created-timestamp-requires-each-value-to-be-globally-unique-any-future-considerations-to-add-support-for-bulk-creation-must-account-for-this" style="color: inherit; text-decoration: none;">
+							<h2>About this spec The IPFS Pinning Service API is intended to be an implementation-agnostic API&#x3a; - For use and implementation by pinning service providers - For use in client mode by IPFS nodes and GUI-based applications  &gt; <strong>Note</strong>: while ready for implementation, this spec is still a work in progress! 🏗️  <strong>Your input and feedback are welcome and valuable as we develop this API spec. Please join the design discussion at <a href="https://github.com/ipfs/pinning-services-api-spec">github.com/ipfs/pinning-services-api-spec</a>.</strong>  # Schemas This section describes the most important object types and conventions.  A full list of fields and schemas can be found in the <code>schemas</code> section of the <a href="https://github.com/ipfs/pinning-services-api-spec/blob/master/ipfs-pinning-service.yaml">YAML file</a>.  ## Identifiers ### cid <a href="https://docs.ipfs.io/concepts/content-addressing/">Content Identifier (CID)</a> points at the root of a DAG that is pinned recursively. ### requestid Unique identifier of a pin request.  When a pin is created, the service responds with unique <code>requestid</code> that can be later used for pin removal. When the same <code>cid</code> is pinned again, a different <code>requestid</code> is returned to differentiate between those pin requests.  Service implementation should use UUID, <code>hash(accessToken,Pin,PinStatus.created)</code>, or any other opaque identifier that provides equally strong protection against race conditions.  ## Objects ### Pin object  <img src="https://bafybeideck2fchyxna4wqwc2mo67yriokehw3yujboc5redjdaajrk2fjq.ipfs.dweb.link/pin.png" alt="pin object">  The <code>Pin</code> object is a representation of a pin request.  It includes the <code>cid</code> of data to be pinned, as well as optional metadata in <code>name</code>, <code>origins</code>, and <code>meta</code>.  ### Pin status response  <img src="https://bafybeideck2fchyxna4wqwc2mo67yriokehw3yujboc5redjdaajrk2fjq.ipfs.dweb.link/pinstatus.png" alt="pin status response object">  The <code>PinStatus</code> object is a representation of the current state of a pinning operation. It includes the original <code>pin</code> object, along with the current <code>status</code> and globally unique <code>requestid</code> of the entire pinning request, which can be used for future status checks and management. Addresses in the <code>delegates</code> array are peers delegated by the pinning service for facilitating direct file transfers (more details in the provider hints section). Any additional vendor-specific information is returned in optional <code>info</code>.  # The pin lifecycle  <img src="https://bafybeideck2fchyxna4wqwc2mo67yriokehw3yujboc5redjdaajrk2fjq.ipfs.dweb.link/lifecycle.png" alt="pinning service objects and lifecycle">  ## Creating a new pin object The user sends a <code>Pin</code> object to <code>POST /pins</code> and receives a <code>PinStatus</code> response: - <code>requestid</code> in <code>PinStatus</code> is the identifier of the pin operation, which can can be used for checking status, and removing the pin in the future - <code>status</code> in <code>PinStatus</code> indicates the current state of a pin  ## Checking status of in-progress pinning <code>status</code> (in <code>PinStatus</code>) may indicate a pending state (<code>queued</code> or <code>pinning</code>). This means the data behind <code>Pin.cid</code> was not found on the pinning service and is being fetched from the IPFS network at large, which may take time.  In this case, the user can periodically check pinning progress via <code>GET /pins/{requestid}</code> until pinning is successful, or the user decides to remove the pending pin.  ## Replacing an existing pin object The user can replace an existing pin object via <code>POST /pins/{requestid}</code>. This is a shortcut for removing a pin object identified by <code>requestid</code> and creating a new one in a single API call that protects against undesired garbage collection of blocks common to both pins. Useful when updating a pin representing a huge dataset where most of blocks did not change. The new pin object <code>requestid</code> is returned in the <code>PinStatus</code> response. The old pin object is deleted automatically.  ## Removing a pin object A pin object can be removed via <code>DELETE /pins/{requestid}</code>.   # Provider hints A pinning service will use the DHT and other discovery methods to locate pinned content; however, it is a good practice to provide additional provider hints to speed up the discovery phase and start the transfer immediately, especially if a client has the data in their own datastore or already knows of other providers.  The most common scenario is a client putting its own IPFS node&#39;s multiaddrs in <code>Pin.origins</code>,  and then attempt to connect to every multiaddr returned by a pinning service in <code>PinStatus.delegates</code> to initiate transfer.  At the same time, a pinning service will try to connect to multiaddrs provided by the client in <code>Pin.origins</code>.  This ensures data transfer starts immediately (without waiting for provider discovery over DHT), and mutual direct dial between a client and a service works around peer routing issues in restrictive network topologies, such as NATs, firewalls, etc.  <strong>NOTE:</strong> Connections to multiaddrs in <code>origins</code> and <code>delegates</code> arrays should be attempted in best-effort fashion, and dial failure should not fail the pinning operation. When unable to act on explicit provider hints, DHT and other discovery methods should be used as a fallback by a pinning service.  <strong>NOTE:</strong> All multiaddrs MUST end with <code>/p2p/{peerID}</code> and SHOULD be fully resolved and confirmed to be dialable from the public internet. Avoid sending addresses from local networks.  # Custom metadata Pinning services are encouraged to add support for additional features by leveraging the optional <code>Pin.meta</code> and <code>PinStatus.info</code> fields. While these attributes can be application- or vendor-specific, we encourage the community at large to leverage these attributes as a sandbox to come up with conventions that could become part of future revisions of this API. ## Pin metadata String keys and values passed in <code>Pin.meta</code> are persisted with the pin object.  Potential uses: - <code>Pin.meta[app_id]</code>: Attaching a unique identifier to pins created by an app enables filtering pins per app via <code>?meta={\&quot;app_id\&quot;:&lt;UUID&gt;}</code> - <code>Pin.meta[vendor_policy]</code>: Vendor-specific policy (for example: which region to use, how many copies to keep)  Note that it is OK for a client to omit or ignore these optional attributes; doing so should not impact the basic pinning functionality.  ## Pin status info Additional <code>PinStatus.info</code> can be returned by pinning service.  Potential uses: - <code>PinStatus.info[status_details]</code>: more info about the current status (queue position, percentage of transferred data, summary of where data is stored, etc); when <code>PinStatus.status=failed</code>, it could provide a reason why a pin operation failed (e.g. lack of funds, DAG too big, etc.) - <code>PinStatus.info[dag_size]</code>: the size of pinned data, along with DAG overhead - <code>PinStatus.info[raw_size]</code>: the size of data without DAG overhead (eg. unixfs) - <code>PinStatus.info[pinned_until]</code>: if vendor supports time-bound pins, this could indicate when the pin will expire  # Pagination and filtering Pin objects can be listed by executing <code>GET /pins</code> with optional parameters:  - When no filters are provided, the endpoint will return a small batch of the 10 most recently created items, from the latest to the oldest. - The number of returned items can be adjusted with the <code>limit</code> parameter (implicit default is 10). - If the value in <code>PinResults.count</code> is bigger than the length of <code>PinResults.results</code>, the client can infer there are more results that can be queried. - To read more items, pass the <code>before</code> filter with the timestamp from <code>PinStatus.created</code> found in the oldest item in the current batch of results. Repeat to read all results. - Returned results can be fine-tuned by applying optional <code>after</code>, <code>cid</code>, <code>name</code>, <code>status</code>, or <code>meta</code> filters.  &gt; <strong>Note</strong>: pagination by the <code>created</code> timestamp requires each value to be globally unique. Any future considerations to add support for bulk creation must account for this.</h2>
+						</a>
+					</div>
+					<p>The version of the OpenAPI document: 1.0.0</p>
+					<p>NOTE: This class is auto generated by OpenAPI Generator (<a href="https://openapi-generator.tech">https://openapi-generator.tech</a>).
+						<a href="https://openapi-generator.tech">https://openapi-generator.tech</a>
+					Do not edit the class manually.</p>
+				</div>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Enumerations</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-enum tsd-parent-kind-module"><a href="../enums/generated_fetch_dist_src_models_Status.Status.html" class="tsd-kind-icon">Status</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="generated_fetch_dist_src_models_Status.html#StatusFromJSON" class="tsd-kind-icon">Status<wbr>FromJSON</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="generated_fetch_dist_src_models_Status.html#StatusFromJSONTyped" class="tsd-kind-icon">Status<wbr>FromJSONTyped</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="generated_fetch_dist_src_models_Status.html#StatusToJSON" class="tsd-kind-icon">Status<wbr>ToJSON</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="StatusFromJSON" class="tsd-anchor"></a>
+					<h3>Status<wbr>FromJSON</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">Status<wbr>FromJSON<span class="tsd-signature-symbol">(</span>json<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/generated_fetch_dist_src_models_Status.Status.html" class="tsd-signature-type" data-tsd-kind="Enumeration">Status</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in generated/fetch/dist/src/models/Status.d.ts:23</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>json: <span class="tsd-signature-type">any</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/generated_fetch_dist_src_models_Status.Status.html" class="tsd-signature-type" data-tsd-kind="Enumeration">Status</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="StatusFromJSONTyped" class="tsd-anchor"></a>
+					<h3>Status<wbr>FromJSONTyped</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">Status<wbr>FromJSONTyped<span class="tsd-signature-symbol">(</span>json<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, ignoreDiscriminator<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/generated_fetch_dist_src_models_Status.Status.html" class="tsd-signature-type" data-tsd-kind="Enumeration">Status</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in generated/fetch/dist/src/models/Status.d.ts:24</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>json: <span class="tsd-signature-type">any</span></h5>
+								</li>
+								<li>
+									<h5>ignoreDiscriminator: <span class="tsd-signature-type">boolean</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/generated_fetch_dist_src_models_Status.Status.html" class="tsd-signature-type" data-tsd-kind="Enumeration">Status</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="StatusToJSON" class="tsd-anchor"></a>
+					<h3>Status<wbr>ToJSON</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">Status<wbr>ToJSON<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">?: </span><a href="../enums/generated_fetch_dist_src_models_Status.Status.html" class="tsd-signature-type" data-tsd-kind="Enumeration">Status</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in generated/fetch/dist/src/models/Status.d.ts:25</li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> value: <a href="../enums/generated_fetch_dist_src_models_Status.Status.html" class="tsd-signature-type" data-tsd-kind="Enumeration">Status</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Modules</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="generated_fetch_dist_src_models_Status.html">generated/fetch/dist/src/models/<wbr>Status</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-enum tsd-parent-kind-module">
+						<a href="../enums/generated_fetch_dist_src_models_Status.Status.html" class="tsd-kind-icon">Status</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="generated_fetch_dist_src_models_Status.html#StatusFromJSON" class="tsd-kind-icon">Status<wbr>FromJSON</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="generated_fetch_dist_src_models_Status.html#StatusFromJSONTyped" class="tsd-kind-icon">Status<wbr>FromJSONTyped</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="generated_fetch_dist_src_models_Status.html#StatusToJSON" class="tsd-kind-icon">Status<wbr>ToJSON</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer>
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

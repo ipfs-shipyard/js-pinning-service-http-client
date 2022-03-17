@@ -23,7 +23,7 @@
     "node": ">=16.0.0",
     "npm": ">=7.0.0"
   },
-  "main": "src/index.js",
+  "main": "src/index.ts",
   "types": "dist/src/index.d.ts",
   "typesVersions": {
     "*": {
@@ -41,7 +41,8 @@
   },
   "files": [
     "src",
-    "dist"
+    "dist",
+    "dist.generated"
   ],
   "eslintConfig": {
     "extends": "ipfs",
@@ -142,10 +143,10 @@
     "lint-TODO:project": "check-aegir-project # currently broken due to corrupting the repoUrl",
     "release": "aegir release",
     "postinstall": "run-s gen",
-    "build": "aegir build",
-    "build2": "tsc-silent -p tsconfig.generated.json --suppress 6133@generated 6192@generated --stats",
+    "build": "run-s build:* && cp-cli dist.generated dist/dist.generated",
+    "build-todo:docs": "aegir docs -p false",
+    "build:deps": "run-s gen",
     "build:main": "aegir build",
-    "build:docs": "aegir ts docs",
     "build:types": "aegir ts -p types",
     "test": "run-s test:*",
     "test:browser": "aegir test --target browser",
@@ -160,6 +161,7 @@
     "gen:ts": "openapi-generator-cli generate --generator-key ts"
   },
   "dependencies": {
+    "cp-cli": "^2.0.0",
     "fetch-ponyfill": "^7.1.0",
     "yargs": "^17.3.1"
   },
@@ -190,10 +192,12 @@
   },
   "exports": {
     ".": {
-      "import": "./generated/api.ts"
+      "import": "./dist/src/index.js",
+      "require": "./dist/src/index.js"
     },
     "./api/apis": {
-      "import": "./generated/api/apis.ts"
+      "import": "./dist/dist.generated/apis",
+      "require": "./dist/dist.generated/apis"
     }
   }
 }

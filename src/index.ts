@@ -1,9 +1,9 @@
 import fetchPonyfill from 'fetch-ponyfill'
-import { Configuration as GeneratedConfiguration } from '../generated/fetch/dist/src'
-import type { ConfigurationParameters } from '../generated/fetch/dist/src'
+import { Configuration as GeneratedConfiguration } from '../dist.generated'
+import type { ConfigurationParameters } from '../dist.generated'
 
-export * from '../generated/fetch/dist/src/apis'
-export * from '../generated/fetch/dist/src/models'
+export * from '../dist.generated/apis'
+export * from '../dist.generated/models'
 
 export class Configuration extends GeneratedConfiguration {
   constructor (options: ConfigurationParameters) {
@@ -32,4 +32,4 @@ export {
   exists,
   mapValues,
   querystring
-} from '../generated/fetch/dist/src/runtime'
+} from '../dist.generated/runtime'

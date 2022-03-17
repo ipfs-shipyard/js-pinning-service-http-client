@@ -7,7 +7,7 @@
     "typeRoots": [
       "./types",
       "./node_modules/@types",
-      "./generated/fetch/dist"
+      "dist/dist.generated"
     ],
     "noEmitOnError": true,
     "esModuleInterop": true,
@@ -20,7 +20,7 @@
     "test/**/*.ts",
     "types/**/*.d.ts",
     "MockServer.ts",
-    "./generated/fetch/dist"
+    "dist/dist.generated"
   ],
   "exclude": [
     "generated"

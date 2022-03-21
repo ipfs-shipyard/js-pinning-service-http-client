@@ -1,0 +1,15 @@
+diff --git a/node_modules/aegir/src/build/index.js b/node_modules/aegir/src/build/index.js
+index a614f51..e455dfb 100644
+--- a/node_modules/aegir/src/build/index.js
++++ b/node_modules/aegir/src/build/index.js
+@@ -130,9 +130,7 @@ const tasks = new Listr([
+      */
+     task: async (ctx, task) => {
+       await tsCmd({
+-        debug: ctx.debug,
+-        tsRepo: ctx.tsRepo,
+-        fileConfig: ctx.fileConfig,
++        ...ctx,
+         preset: 'types',
+         include: ctx.fileConfig.ts.include,
+         copyTo: ctx.fileConfig.ts.copyTo,

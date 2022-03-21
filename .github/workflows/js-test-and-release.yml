@@ -16,9 +16,14 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: lts/*
-    - uses: ipfs/aegir/actions/cache-node-modules@master
-    - run: npm run --if-present lint
-    - run: npm run --if-present dep-check
+    - name: Install dependencies
+      run: npm install
+    - name: Generate client files
+      run: npm run gen
+    - name: lint
+      run: npm run --if-present lint
+    - name: dependency check
+      run: npm run --if-present dep-check
 
   test-node:
     needs: check
@@ -26,14 +31,17 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macos-latest]
-        node: [16]
+        node: ['lts/*']
       fail-fast: true
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node }}
-      - uses: ipfs/aegir/actions/cache-node-modules@master
+      - name: Install dependencies
+        run: npm install
+      - name: Generate client files
+        run: npm run gen
       - run: npm run --if-present test:node
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -48,7 +56,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
+      - name: Install dependencies
+        run: npm install
+      - name: Generate client files
+        run: npm run gen
       - run: npm run --if-present test:chrome
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -63,7 +74,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
+      - name: Install dependencies
+        run: npm install
+      - name: Generate client files
+        run: npm run gen
       - run: npm run --if-present test:chrome-webworker
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -78,7 +92,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
+      - name: Install dependencies
+        run: npm install
+      - name: Generate client files
+        run: npm run gen
       - run: npm run --if-present test:firefox
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -93,7 +110,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
+      - name: Install dependencies
+        run: npm install
+      - name: Generate client files
+        run: npm run gen
       - run: npm run --if-present test:firefox-webworker
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -108,7 +128,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
+      - name: Install dependencies
+        run: npm install
+      - name: Generate client files
+        run: npm run gen
       - run: npx xvfb-maybe npm run --if-present test:electron-main
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -123,7 +146,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
+      - name: Install dependencies
+        run: npm install
+      - name: Generate client files
+        run: npm run gen
       - run: npx xvfb-maybe npm run --if-present test:electron-renderer
       - uses: codecov/codecov-action@f32b3a3741e1053eb607407145bc9619351dc93b # v2.1.0
         with:
@@ -141,7 +167,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: lts/*
-      - uses: ipfs/aegir/actions/cache-node-modules@master
+      - name: Install dependencies
+        run: npm install
+      - name: Generate client files
+        run: npm run gen
       - uses: ipfs/aegir/actions/docker-login@master
         with:
           docker-token: ${{ secrets.DOCKER_TOKEN }}

@@ -1,3 +1,2 @@
 
 declare type GlobalFetch = WindowOrWorkerGlobalScope
-

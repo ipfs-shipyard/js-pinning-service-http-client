@@ -12,6 +12,13 @@
   "bugs": {
     "url": "https://github.com/ipfs-shipyard/js-pinning-service-http-client/issues"
   },
+  "keywords": [
+    "dweb",
+    "ipfs",
+    "pinning service",
+    "protocol labs",
+    "web3"
+  ],
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=7.0.0"
@@ -124,39 +131,61 @@
     ]
   },
   "scripts": {
+    "clean": "npx rimraf dist generated node_modules",
+    "ci:test": "run-s test:*",
     "dep-check": "aegir dep-check src/**/*.ts test/**/*.ts generated/**/*.ts",
     "fix": "run-s fix:*",
     "fix:lint": "aegir lint --fix",
     "lint": "run-s lint:*",
     "lint:main": "aegir lint",
-    "lint:project": "check-aegir-project",
+    "lint:ts": "aegir ts -p check",
+    "lint-TODO:project": "check-aegir-project # currently broken due to corrupting the repoUrl",
     "release": "aegir release",
     "postinstall": "run-s gen",
     "build": "aegir build",
+    "build2": "tsc-silent -p tsconfig.generated.json --suppress 6133@generated 6192@generated --stats",
+    "build:main": "aegir build",
+    "build:docs": "aegir ts docs",
+    "build:types": "aegir ts -p types",
     "test": "run-s test:*",
+    "test:browser": "aegir test --target browser",
+    "test:webworker": "aegir test --target webworker",
     "test:electron": "aegir test --target electron-main",
     "test:node": "aegir test --target node --cov && npx nyc report",
-    "pregen:node": "openapi-generator-cli validate -i https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/main/ipfs-pinning-service.yaml",
-    "gen": "run-p gen:*",
+    "pregen": "openapi-generator-cli validate -i https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/v1.0.0/ipfs-pinning-service.yaml",
+    "gen": "run-p gen:fetch",
+    "postgen": "tsc-silent -p tsconfig.generated.json --suppress 6133@generated 6192@generated --stats",
     "gen:fetch": "openapi-generator-cli generate --generator-key fetch",
     "gen:node": "openapi-generator-cli generate --generator-key node",
     "gen:ts": "openapi-generator-cli generate --generator-key ts"
   },
   "dependencies": {
-    "node-fetch": "^3.2.0"
+    "fetch-ponyfill": "^7.1.0",
+    "yargs": "^17.3.1"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.4.26",
+    "@swc/core": "^1.2.144",
+    "@swc/helpers": "^0.3.3",
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/mocha": "^9.1.0",
-    "@types/node": "^17.0.16",
-    "@types/node-fetch": "^3.0.3",
+    "@types/node": "^17.0.21",
+    "@types/portscanner": "^2.1.1",
     "aegir": "^36.1.3",
     "check-aegir-project": "^1.0.3",
+    "cors": "^2.8.5",
     "dotenvrc": "^1.0.1",
+    "express": "^4.17.3",
+    "express-promise-router": "^4.1.1",
     "mock-ipfs-pinning-service": "^0.4.0",
     "npm-run-all": "^4.1.5",
-    "openapi-typescript": "^5.1.1"
+    "openapi-typescript": "^5.1.1",
+    "portscanner": "^2.2.0",
+    "regenerator-runtime": "^0.13.9",
+    "ts-node": "^10.5.0",
+    "tsc-silent": "^1.2.1",
+    "winston": "^3.6.0"
   },
   "exports": {
     ".": {

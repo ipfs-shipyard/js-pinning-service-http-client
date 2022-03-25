@@ -16,3 +16,4 @@ package-lock.json
 .nyc_output
 generated/fetch/package.json
 generated/fetch/tsconfig.json
+tsconfig-types.aegir.tsbuildinfo

@@ -1,23 +1,33 @@
 import fetchPonyfill from 'fetch-ponyfill'
 import { Configuration as GeneratedConfiguration } from '../dist.generated'
-import type { ConfigurationParameters } from '../dist.generated'
+import type { ConfigurationParameters as GeneratedConfigurationParameters } from '../dist.generated'
 
 export * from '../dist.generated/apis'
 export * from '../dist.generated/models'
 
+export interface ConfigurationParameters extends Omit<GeneratedConfigurationParameters, 'basePath'>{
+  endpointUrl?: string
+}
 export class Configuration extends GeneratedConfiguration {
   constructor (options: ConfigurationParameters) {
+    const finalOptions: GeneratedConfigurationParameters = { ...options }
+
     /**
      * Prevent the need for everyone to have to override the fetch API...
      */
     if (options.fetchApi == null) {
-      options.fetchApi = fetchPonyfill().fetch
+      finalOptions.fetchApi = fetchPonyfill().fetch
     }
-    super(options)
+
+    // @see https://github.com/ipfs-shipyard/js-pinning-service-http-client/issues/3
+    if (options.endpointUrl != null) {
+      finalOptions.basePath = options.endpointUrl
+    }
+
+    super(finalOptions)
   }
 }
 
-export type { ConfigurationParameters }
 export {
   BASE_PATH,
   BaseAPI,
@@ -32,4 +42,15 @@ export {
   exists,
   mapValues,
   querystring
+} from '../dist.generated/runtime'
+
+export type {
+  FetchParams,
+  RequestOpts,
+  Consume,
+  RequestContext,
+  ResponseContext,
+  Middleware,
+  ApiResponse,
+  ResponseTransformer
 } from '../dist.generated/runtime'

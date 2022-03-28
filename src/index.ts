@@ -1,14 +1,13 @@
 import fetchPonyfill from 'fetch-ponyfill'
+
 import { Configuration as GeneratedConfiguration } from '../dist.generated'
 import type { ConfigurationParameters as GeneratedConfigurationParameters } from '../dist.generated'
+import { PinsApi as RemotePinningServiceClient } from '../dist.generated/apis'
 
-export * from '../dist.generated/apis'
-export * from '../dist.generated/models'
-
-export interface ConfigurationParameters extends Omit<GeneratedConfigurationParameters, 'basePath'>{
+interface ConfigurationParameters extends Omit<GeneratedConfigurationParameters, 'basePath'>{
   endpointUrl?: string
 }
-export class Configuration extends GeneratedConfiguration {
+class Configuration extends GeneratedConfiguration {
   constructor (options: ConfigurationParameters) {
     const finalOptions: GeneratedConfigurationParameters = { ...options }
 
@@ -27,6 +26,32 @@ export class Configuration extends GeneratedConfiguration {
     super(finalOptions)
   }
 }
+
+/**
+ * Overwritten and renamed exports
+ */
+export type {
+  PinsApiInterface as RemotePinningServiceClientInterface
+} from '../dist.generated/apis'
+
+export {
+  Configuration,
+  RemotePinningServiceClient
+}
+export type { ConfigurationParameters }
+
+/**
+ * Unmodified exports
+ */
+export type {
+  PinsGetRequest,
+  PinsPostRequest,
+  PinsRequestidDeleteRequest,
+  PinsRequestidGetRequest,
+  PinsRequestidPostRequest
+} from '../dist.generated/apis'
+
+export * from '../dist.generated/models'
 
 export {
   BASE_PATH,

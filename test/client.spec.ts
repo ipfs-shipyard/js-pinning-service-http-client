@@ -1,20 +1,20 @@
 /* eslint-env browser, node, mocha */
 
 import { expect } from 'aegir/utils/chai'
-import { Configuration, PinsApi, Status } from '../src'
+import { Configuration, RemotePinningServiceClient, Status } from '../src'
 import type { Pin } from '../src'
 import fetchPonyfill from 'fetch-ponyfill'
 
 const { fetch } = fetchPonyfill()
 
 let Config = new Configuration({
-  basePath: 'http://127.0.0.1:3000',
+  endpointUrl: 'http://127.0.0.1:3000',
   // fetchApi: fetch,
   accessToken: process.env.MOCK_PINNING_SERVER_SECRET
 })
 describe('Client', () => {
   it('Can be instantiated', () => {
-    expect(() => new PinsApi(Config)).not.to.throw()
+    expect(() => new RemotePinningServiceClient(Config)).not.to.throw()
   })
 
   describe('Operations', () => {
@@ -22,9 +22,9 @@ describe('Client', () => {
     // let Config: Configuration
     beforeEach(async () => {
       const response = await fetch('http://localhost:3000/start')
-      const { basePath, accessToken } = await response.json()
+      const { endpointUrl, accessToken } = await response.json()
       Config = new Configuration({
-        basePath,
+        endpointUrl,
         accessToken
         // fetchApi: fetch
       })
@@ -42,13 +42,13 @@ describe('Client', () => {
     })
 
     it('GET: Can get failed Pins', async () => {
-      const Client = new PinsApi(Config)
+      const Client = new RemotePinningServiceClient(Config)
       const response = await Client.pinsGet({ limit: 1, status: new Set([Status.Failed]) })
       expect(response).to.deep.eq({ count: 0, results: new Set() })
     })
 
     it('GET: Can add a Pin successfully', async () => {
-      const Client = new PinsApi(Config)
+      const Client = new RemotePinningServiceClient(Config)
       const pin: Pin = {
         cid: 'abc123',
         name: 'pinned-test1'
@@ -59,7 +59,7 @@ describe('Client', () => {
     })
 
     it('POST: Can handle a failed pinning', async () => {
-      const Client = new PinsApi(Config)
+      const Client = new RemotePinningServiceClient(Config)
       const pin: Pin = {
         cid: 'abc123',
         name: 'failed-test2'

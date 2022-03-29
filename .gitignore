@@ -17,3 +17,4 @@ package-lock.json
 generated/fetch/package.json
 generated/fetch/tsconfig.json
 tsconfig-types.aegir.tsbuildinfo
+docs

@@ -2,8 +2,14 @@ require('ts-node').register({
   project: 'tsconfig.json',
 })
 
-const { MockServerController } = require('./test/MockServerController')
+// const { MockServerController } = require('./test/MockServerController')
 
+// import {register} from 'ts-node'
+// register({
+//   project: 'tsconfig.json',
+// })
+// const { MockServerController } = require('./test/MockServerController')
+// import {MockServerController} from './test/MockServerController.js'
 
 /** @type {import('aegir').PartialOptions} */
 module.exports = {
@@ -21,11 +27,12 @@ module.exports = {
   test: {
     cov: false,
     async before () {
+      const controller = new (await import('./test/MockServerController')).MockServerController()
       return {
         env: {
           MOCK_PINNING_SERVER_SECRET: 'ci',
         },
-        controller: new MockServerController(),
+        controller,
       }
     },
     /**

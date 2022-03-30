@@ -3,7 +3,8 @@ import type { Application } from 'express'
 import type { Server } from 'http'
 import portscanner from 'portscanner'
 import cors from 'cors'
-import { logger } from './logger'
+
+import { logger } from './logger.js'
 
 try {
   import('dotenvrc')

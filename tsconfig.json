@@ -32,7 +32,7 @@
     "compiler": "typescript",
     "compilerHost": false,
     "compilerOptions": {
-      "module": "CommonJS"
+      "module": "ES2020"
     },
     "preferTsExts": true,
     "pretty": true,

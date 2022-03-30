@@ -1,6 +1,3 @@
-// import { MockServer } from './test/MockServer'
-
-// let mockServer = new MockServer()
 require('ts-node').register({
   project: 'tsconfig.json',
 })

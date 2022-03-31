@@ -1,7 +1,8 @@
 import fetchPonyfill from 'fetch-ponyfill'
 
 import { Configuration as GeneratedConfiguration } from '../dist.generated/index.js'
-import type { ConfigurationParameters as GeneratedConfigurationParameters } from '../dist.generated/index.js'
+// eslint-disable-next-line import/no-duplicates
+import { ConfigurationParameters as GeneratedConfigurationParameters } from '../dist.generated/index.js'
 import { PinsApi as RemotePinningServiceClient } from '../dist.generated/apis/index.js'
 
 interface ConfigurationParameters extends Omit<GeneratedConfigurationParameters, 'basePath'>{

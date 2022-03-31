@@ -144,10 +144,10 @@
     "lint-TODO:project": "check-aegir-project # currently broken due to corrupting the repoUrl",
     "release": "aegir release",
     "postinstall": "run-s gen",
-    "build": "run-s build:* && cp-cli dist.generated dist/dist.generated",
+    "build": "run-s build:* && cp-cli dist.generated dist/dist.generated && ipjs build",
     "build-todo:docs": "aegir docs -p false",
     "build:deps": "run-s gen",
-    "build:main": "aegir build",
+    "build:main": "aegir ts",
     "build:types": "aegir ts -p types",
     "test": "run-s test:*",
     "test:browser": "aegir test --target browser",
@@ -191,12 +191,7 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/src/index.js",
-      "require": "./dist/src/index.js"
-    },
-    "./api/apis": {
-      "import": "./dist/dist.generated/apis",
-      "require": "./dist/dist.generated/apis"
+      "import": "./dist/src/index.js"
     }
   }
 }

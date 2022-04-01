@@ -1,18 +1,5 @@
-// require('ts-node').register({
-//   project: 'tsconfig.json',
-// })
-
-// const { MockServerController } = require('./test/MockServerController')
-
-// import {register} from 'ts-node'
-// register({
-//   project: 'tsconfig.json',
-// })
-// const { MockServerController } = require('./test/MockServerController')
-// import {MockServerController} from './test/MockServerController.js'
-
 /** @type {import('aegir').PartialOptions} */
-module.exports = {
+export default {
   docs: {
     publish: true,
     entryPoint: './'

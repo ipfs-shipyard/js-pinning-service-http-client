@@ -1,9 +1,9 @@
 import fetchPonyfill from 'fetch-ponyfill'
 
-import { Configuration as GeneratedConfiguration } from '../dist.generated/index.js'
+import { Configuration as GeneratedConfiguration } from 'generated/index.js'
 // eslint-disable-next-line import/no-duplicates
-import { ConfigurationParameters as GeneratedConfigurationParameters } from '../dist.generated/index.js'
-import { PinsApi as RemotePinningServiceClient } from '../dist.generated/apis/index.js'
+import type { ConfigurationParameters as GeneratedConfigurationParameters } from 'generated/index.js'
+import { PinsApi as RemotePinningServiceClient } from 'generated/apis/index.js'
 
 interface ConfigurationParameters extends Omit<GeneratedConfigurationParameters, 'basePath'>{
   endpointUrl?: string
@@ -33,7 +33,7 @@ class Configuration extends GeneratedConfiguration {
  */
 export type {
   PinsApiInterface as RemotePinningServiceClientInterface
-} from '../dist.generated/apis'
+} from 'generated/apis'
 
 export {
   Configuration,
@@ -50,9 +50,9 @@ export type {
   PinsRequestidDeleteRequest,
   PinsRequestidGetRequest,
   PinsRequestidPostRequest
-} from '../dist.generated/apis'
+} from 'generated/apis'
 
-export * from '../dist.generated/models'
+export * from 'generated/models'
 
 export {
   BASE_PATH,
@@ -68,7 +68,7 @@ export {
   exists,
   mapValues,
   querystring
-} from '../dist.generated/runtime'
+} from 'generated/runtime'
 
 export type {
   FetchParams,
@@ -79,4 +79,4 @@ export type {
   Middleware,
   ApiResponse,
   ResponseTransformer
-} from '../dist.generated/runtime'
+} from 'generated/runtime'

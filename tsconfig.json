@@ -19,12 +19,12 @@
     {
       "path": "./src",
     },
-    // {
-    //   "path": "./test",
-    // },
-    // {
-    //   "path": "./tsconfig.generated.json",
-    // },
+    {
+      "path": "./test",
+    },
+    {
+      "path": "./tsconfig.generated.json",
+    },
   ],
   "include": ["src"],
   "exclude": [

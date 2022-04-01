@@ -1,6 +1,6 @@
-require('ts-node').register({
-  project: 'tsconfig.json',
-})
+// require('ts-node').register({
+//   project: 'tsconfig.json',
+// })
 
 // const { MockServerController } = require('./test/MockServerController')
 
@@ -27,7 +27,7 @@ module.exports = {
   test: {
     cov: false,
     async before () {
-      const controller = new (await import('./test/MockServerController')).MockServerController()
+      const controller = new (await import('./dist/test/MockServerController')).MockServerController()
       return {
         env: {
           MOCK_PINNING_SERVER_SECRET: 'ci',

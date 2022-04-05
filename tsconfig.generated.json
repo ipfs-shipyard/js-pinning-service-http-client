@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "sourceRoot": "generated/fetch/src",
-    "outDir": "generated/fetch/dist",
+    "outDir": "dist.generated",
     "emitDeclarationOnly": false,
     "module": "ES2020",
     "target": "ES2020",
@@ -15,7 +15,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "isolatedModules": false,
-    "rootDir": "generated/fetch",
+    "rootDir": "generated/fetch/src",
     "sourceMap": true,
     "moduleResolution":"Node"
 

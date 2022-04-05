@@ -28,7 +28,7 @@ class MockServerController {
          */
         res.send({
           success: true,
-          basePath: mockServer.basePath,
+          endpointUrl: mockServer.basePath,
           accessToken: process.env.MOCK_PINNING_SERVER_SECRET
         })
       } catch (error) {

@@ -14,16 +14,16 @@ This client only has a programmatic API at the moment (no CLI). You use it like 
 
 ```ts
 
-import { Configuration, PinsApi, Status } from '@ipfs-shipyard/pinning-service-client'
+import { Configuration, RemotePinningServiceClient, Status } from '@ipfs-shipyard/pinning-service-client'
 import type { PinsGetRequest, PinResults } from '@ipfs-shipyard/pinning-service-client'
 
 const config = new Configuration({
-  basePath, // the URI for your pinning provider, e.g. `http://localhost:3000`
+  endpointUrl, // the URI for your pinning provider, e.g. `http://localhost:3000`
   accessToken, // the secret token/key given to you by your pinning provider
   // fetchApi: fetch, // You can pass your own fetchApi implementation, but we use fetch-ponyfill by default.
 })
 
-const client = new PinsApi(config)
+const client = new RemotePinningServiceClient(config)
 
 (async () => {
   // Get 10 failed Pins

@@ -1,6 +1,7 @@
 node_modules
 typings
 dist
+dist.generated
 build
 coverage
 node_modules
@@ -15,3 +16,5 @@ package-lock.json
 .nyc_output
 generated/fetch/package.json
 generated/fetch/tsconfig.json
+tsconfig-types.aegir.tsbuildinfo
+docs

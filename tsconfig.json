@@ -9,7 +9,7 @@
       "./types",
       "./node_modules/@types",
     ],
-    "importsNotUsedAsValues": "remove",
+    "importsNotUsedAsValues": "preserve",
     "noEmitOnError": true,
     "esModuleInterop": true,
     "noUnusedLocals": false,

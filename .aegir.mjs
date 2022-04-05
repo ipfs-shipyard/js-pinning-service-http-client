@@ -1,3 +1,5 @@
+import { MockServerController } from './dist/test/MockServerController'
+
 /** @type {import('aegir').PartialOptions} */
 export default {
   docs: {
@@ -14,7 +16,7 @@ export default {
   test: {
     cov: false,
     async before () {
-      const controller = new (await import('./dist/test/MockServerController')).MockServerController()
+      const controller = new MockServerController()
       return {
         env: {
           MOCK_PINNING_SERVER_SECRET: 'ci',

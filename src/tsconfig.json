@@ -5,7 +5,7 @@
     "incremental": true,
     "composite": true,
     "sourceRoot": "./",
-    "outDir": "../dist",
+    "outDir": "../dist/src",
     "emitDeclarationOnly": false,
     "module": "ES2020",
     "target": "ES2020",
@@ -20,6 +20,6 @@
     },
   ],
   "include": [
-    "./index.ts",
+    ".",
   ]
 }

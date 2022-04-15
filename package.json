@@ -142,7 +142,6 @@
     "lint:ts": "aegir ts -p check",
     "lint-TODO:project": "check-aegir-project # currently broken due to corrupting the repoUrl",
     "release": "aegir release",
-    "postinstall": "run-s gen",
     "build": "run-s build:* && cp-cli dist.generated dist/dist.generated",
     "build-todo:docs": "aegir docs -p false",
     "build:deps": "run-s gen",

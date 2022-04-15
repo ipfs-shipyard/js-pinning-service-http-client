@@ -23,26 +23,27 @@
     "node": ">=16.0.0",
     "npm": ">=7.0.0"
   },
-  "main": "src/index.ts",
+  "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "typesVersions": {
     "*": {
       "*": [
         "*",
         "dist/*",
-        "dist/src/*"
+        "dist/src/*",
+        "dist/types/*"
       ],
       "src/*": [
         "*",
         "dist/*",
-        "dist/src/*"
+        "dist/src/*",
+        "dist/types/*"
       ]
     }
   },
   "files": [
     "src",
-    "dist",
-    "dist.generated"
+    "dist"
   ],
   "eslintConfig": {
     "extends": "ipfs",
@@ -141,7 +142,7 @@
     "lint:main": "aegir lint",
     "lint:ts": "aegir ts -p check",
     "lint-TODO:project": "check-aegir-project # currently broken due to corrupting the repoUrl",
-    "release": "aegir release",
+    "release": "npm publish --access public && aegir release",
     "build": "run-s build:* && cp-cli dist.generated dist/dist.generated",
     "build-todo:docs": "aegir docs -p false",
     "build:deps": "run-s gen",
@@ -184,7 +185,8 @@
     "portscanner": "^2.2.0",
     "regenerator-runtime": "^0.13.9",
     "ts-node": "^10.7.0",
-    "tsc-silent": "^1.2.1",
+    "tsc-silent": "^1.2.2",
+    "typescript": "^4.6.3",
     "winston": "^3.6.0"
   },
   "exports": {

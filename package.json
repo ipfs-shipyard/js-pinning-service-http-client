@@ -166,7 +166,8 @@
     "gen:ts": "openapi-generator-cli generate --generator-key ts -i https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/v1.0.0/ipfs-pinning-service.yaml"
   },
   "dependencies": {
-    "fetch-ponyfill": "^7.1.0"
+    "fetch-ponyfill": "^7.1.0",
+    "typescript": "^4.6.3"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.4.26",

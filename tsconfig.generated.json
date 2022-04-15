@@ -3,7 +3,7 @@
     "sourceRoot": "generated/fetch/src",
     "outDir": "dist.generated",
     "emitDeclarationOnly": false,
-    "module": "ES2020",
+    "module": "CommonJS",
     "target": "ES2020",
     "typeRoots": [
       "./types",

@@ -1,6 +1,6 @@
 {
   "name": "@ipfs-shipyard/pinning-service-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A lightweight client generated from the ipfs-pinning-service-spec defined at https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/main/ipfs-pinning-service.yaml",
   "author": "Russell Dempsey <1173416+SgtPooki@users.noreply.github.com>",
   "license": "Apache-2.0 OR MIT",
@@ -198,5 +198,9 @@
       "import": "./dist/dist.generated/apis",
       "require": "./dist/dist.generated/apis"
     }
-  }
+  },
+  "contributors": [
+    "Russell Dempsey <1173416+SgtPooki@users.noreply.github.com>",
+    "Marcin Rataj <lidel@lidel.org>"
+  ]
 }

@@ -173,7 +173,7 @@
     "@types/mocha": "^9.1.0",
     "@types/node": "^17.0.21",
     "@types/portscanner": "^2.1.1",
-    "aegir": "^36.2.2",
+    "aegir": "^37.0.15",
     "check-aegir-project": "^1.0.3",
     "cors": "^2.8.5",
     "cp-cli": "^2.0.0",

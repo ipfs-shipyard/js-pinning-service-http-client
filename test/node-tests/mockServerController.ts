@@ -1,7 +1,7 @@
 import { MockServerController } from '../MockServerController'
 
 import fetchPonyfill from 'fetch-ponyfill'
-import { expect } from 'aegir/utils/chai'
+import { expect } from 'aegir/chai'
 
 const { fetch } = fetchPonyfill()
 

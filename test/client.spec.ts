@@ -1,6 +1,6 @@
 /* eslint-env browser, node, mocha */
 
-import { expect } from 'aegir/utils/chai'
+import { expect } from 'aegir/chai'
 import { Configuration, RemotePinningServiceClient, Status } from '../src'
 import type { Pin } from '../src'
 import fetchPonyfill from 'fetch-ponyfill'

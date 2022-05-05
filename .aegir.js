@@ -6,7 +6,6 @@ export const config = {
     publish: true,
     entryPoint: './'
   },
-  tsRepo: true,
   build: {
     config: {
       platform: 'node'
@@ -24,9 +23,8 @@ export const config = {
       }
     },
     /**
-     *
-     * @param {GlobalOptions & TestOptions} _
-     * @param {MockServerController} controller
+     * @param {import('aegir').GlobalOptions & import('aegir').TestOptions} _
+     * @param { {controller: MockServerController} } beforeResult
      */
     async after (_, {controller}) {
       await controller.shutdown()

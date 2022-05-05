@@ -1,7 +1,7 @@
 {
   "extends": "aegir/src/config/tsconfig.aegir.json",
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": "dist.test",
     "typeRoots": [
       "./types",
       "./node_modules/@types",
@@ -9,13 +9,9 @@
     ],
   },
   "include": [
-    "src",
-    "test/**/*.ts",
+    "test/MockServerController.ts",
+    "test/MockServer.ts",
     "types/**/*.d.ts",
-    "dist/dist.generated"
-  ],
-  "exclude": [
-    "generated",
-    "dist.test",
+    "test/logger.ts",
   ],
 }

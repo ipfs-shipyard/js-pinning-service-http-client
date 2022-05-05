@@ -1,8 +1,9 @@
 import express from 'express'
-import { MockServer } from './MockServer'
 import Router from 'express-promise-router'
 import cors from 'cors'
-import { logger } from './logger'
+
+import { MockServer } from './MockServer.js'
+import { logger } from './logger.js'
 
 /**
  * MockServerController stands up a server on port 3000

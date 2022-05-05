@@ -12,7 +12,7 @@
       "extends": ["plugin:import/recommended-esm"],
       "files": "./src/**/*.ts",
       "rules": {
-        "esm-extensions": "error"
+        "import/esm-extensions": "error"
       }
     }
   ],

@@ -46,10 +46,10 @@ index 247818e..21a8f63 100644
    'warnings': require('../config/warnings'),
 diff --git a/node_modules/eslint-plugin-import/lib/rules/esm-extensions.js b/node_modules/eslint-plugin-import/lib/rules/esm-extensions.js
 new file mode 100644
-index 0000000..31e9d44
+index 0000000..e2f855a
 --- /dev/null
 +++ b/node_modules/eslint-plugin-import/lib/rules/esm-extensions.js
-@@ -0,0 +1,74 @@
+@@ -0,0 +1,116 @@
 +'use strict'
 +
 +
@@ -89,38 +89,80 @@ index 0000000..31e9d44
 +
 +  create: function (context) {
 +      var options = context.options[0] || {}
++      console.dir(context)
 +
 +
-+      function checkSourceValue(source, node) {
-+        context.report(
-+            source, 'TEST ERROR MESSAGE \'' + String(
-+              source.value) + '\'.')
-+        // ignore type-only imports
-+        if (node.importKind === 'type') {
-+          return
-+        }
++      // function checkSourceValue(source, node) {
++      //   context.report(
++      //       source, 'TEST ERROR MESSAGE \'' + String(
++      //         source.value) + '\'.')
++      //   // ignore type-only imports
++      //   if (node.importKind === 'type') {
++      //     return
++      //   }
 +
-+        var caseSensitive = !_resolve.CASE_SENSITIVE_FS && options.caseSensitive !== false
-+        var caseSensitiveStrict = !_resolve.CASE_SENSITIVE_FS && options.caseSensitiveStrict
++      //   var caseSensitive = !_resolve.CASE_SENSITIVE_FS && options.caseSensitive !== false
++      //   var caseSensitiveStrict = !_resolve.CASE_SENSITIVE_FS && options.caseSensitiveStrict
 +
-+        var resolvedPath = (0, _resolve2['default'])(source.value, context)
++      //   var resolvedPath = (0, _resolve2['default'])(source.value, context)
 +
-+        if (resolvedPath === undefined) {
-+          context.report(
-+            source, 'Unable to resolve path to module \'' + String(
-+              source.value) + '\'.')
++      //   if (resolvedPath === undefined) {
++      //     context.report(
++      //       source, 'Unable to resolve path to module \'' + String(
++      //         source.value) + '\'.')
 +
-+        } else if (caseSensitive || caseSensitiveStrict) {
-+          var cacheSettings = _ModuleCache2['default'].getSettings(context.settings)
-+          if (!(0, _resolve.fileExistsWithCaseSync)(resolvedPath, cacheSettings, caseSensitiveStrict)) {
-+            context.report(
-+              source, 'Casing of ' + String(
-+                source.value) + ' does not match the underlying filesystem.')
++      //   } else if (caseSensitive || caseSensitiveStrict) {
++      //     var cacheSettings = _ModuleCache2['default'].getSettings(context.settings)
++      //     if (!(0, _resolve.fileExistsWithCaseSync)(resolvedPath, cacheSettings, caseSensitiveStrict)) {
++      //       context.report(
++      //         source, 'Casing of ' + String(
++      //           source.value) + ' does not match the underlying filesystem.')
 +
++      //     }
++      //   }
++      // }
++      const sourceCode = context.getSourceCode();
++
++
++      return {
++        // ...(0, _moduleVisitor2['default'])(checkSourceValue, options),
++        ExportDeclaration: function (node) {
++
++        },
++        ImportDeclaration: function (node) {
++          // console.log(`sourceCode.getText(node): `, sourceCode.getText(node));
++
++          console.log(`node.importKind: `, node.importKind);
++          const importedPath = node.source.value
++          if (importedPath[0] !== '.') {
++            console.log(`importedPath of '${importedPath}' is not relative, aborting rule early.`)
++            return
 +          }
-+        }
-+      }
++          const nodeSource = sourceCode.getText(node)
++          node.specifiers.forEach((specifier) => {
++          console.log(`specifier.type: `, specifier.type);
 +
-+      return (0, _moduleVisitor2['default'])(checkSourceValue, options)
++          const importedObjectName = specifier.imported?.name
++          const localObjectName = specifier.local?.name
++          if (importedObjectName == null || localObjectName == null) {
++            console.log('importedObjectName is undefined, check out the specifier', specifier)
++          } else {
++            const wasRenamed = localObjectName && localObjectName !== localObjectName
++            console.log(`was ${importedObjectName} renamed to ${localObjectName} ?: ${wasRenamed ? 'yes' : 'no'}!`)
++          }
++          })
++          // console.log('ImportDeclaration node', node)
++          // console.log('ImportDeclaration node.parent.body', node.parent.body)
++          // console.log('ImportDeclaration node.specifiers', node.specifiers)
++            // console.log('ImportDeclaration node.source.value: ', node.source.value);
++            context.report({
++                message: "ImportDeclaration source:  ".concat(nodeSource),
++                node: node
++            });
++        },
++        // ImportDefaultSpecifier: function (node) {
++        //   console.log('ImportDefaultSpecifier node', node)
++        // },
++      }
 +    }
 +}

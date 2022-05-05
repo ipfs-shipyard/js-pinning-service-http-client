@@ -1,1 +1,1 @@
-export * from './mockServerController'
+export * from './mockServerController.js'

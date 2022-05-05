@@ -1,0 +1,20 @@
+{
+  "root": true,
+  "plugins": ["import"],
+  "extends": ["plugin:import/recommended-esm"],
+  "rules": {
+    "esm-extensions": "error"
+  },
+  "overrides": [
+    {
+      "parser": "@typescript-eslint/parser",
+      "plugins": ["@typescript-eslint", "import"],
+      "extends": ["plugin:import/recommended-esm"],
+      "files": "./src/**/*.ts",
+      "rules": {
+        "esm-extensions": "error"
+      }
+    }
+  ],
+  "ignorePatterns": ["generated/**/*.{j,t}s", "dist.generated/**/*.{j,t}s", "dist/**/*.{j,t}s"]
+}

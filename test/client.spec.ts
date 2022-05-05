@@ -1,9 +1,10 @@
 /* eslint-env browser, node, mocha */
+import fetchPonyfill from 'fetch-ponyfill'
 
 import { expect } from 'aegir/chai'
-import { Configuration, RemotePinningServiceClient, Status } from '../src'
-import type { Pin } from '../src'
-import fetchPonyfill from 'fetch-ponyfill'
+
+import { Configuration, RemotePinningServiceClient, Status } from '../src/index.js'
+import type { Pin } from '../src/index.js'
 
 const { fetch } = fetchPonyfill()
 

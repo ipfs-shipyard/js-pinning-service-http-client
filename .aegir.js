@@ -1,4 +1,5 @@
-import { MockServerController } from './dist.test/test/MockServerController.js'
+import { MockServerController } from './dist/test/MockServerController.js'
+import {logger} from './dist/test/logger.js'
 
 /** @type {import('aegir').PartialOptions} */
 export const config = {
@@ -15,11 +16,15 @@ export const config = {
   test: {
     cov: false,
     async before () {
+      logger.info('.aegir.js: inside before function')
+      const controller = new MockServerController()
+
+      logger.info(`.aegir.js:before(): controller.server.getMaxListeners() = ${controller.server.getMaxListeners()}`)
       return {
         env: {
           MOCK_PINNING_SERVER_SECRET: 'ci',
         },
-        controller: new MockServerController(),
+        controller,
       }
     },
     /**
@@ -27,6 +32,7 @@ export const config = {
      * @param { {controller: MockServerController} } beforeResult
      */
     async after (_, {controller}) {
+      logger.info('.aegir.js: inside after function')
       await controller.shutdown()
     }
   }

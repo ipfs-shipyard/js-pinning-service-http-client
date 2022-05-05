@@ -1,11 +1,13 @@
-import { setup } from 'mock-ipfs-pinning-service'
 import type { Application } from 'express'
 import type { Server } from 'http'
 import portscanner from 'portscanner'
 import cors from 'cors'
 
+import { setup } from 'mock-ipfs-pinning-service'
+
 import { logger } from './logger.js'
 
+logger.info('Loading MockServer module')
 try {
   import('dotenvrc')
 } catch (err) {

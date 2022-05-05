@@ -20,3 +20,4 @@ tsconfig-types.aegir.tsbuildinfo
 docs
 .env
 dist.test
+logs

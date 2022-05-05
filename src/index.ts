@@ -10,7 +10,6 @@ interface ConfigurationParameters extends Omit<GeneratedConfigurationParameters,
 class Configuration extends GeneratedConfiguration {
   constructor (options: ConfigurationParameters) {
     const finalOptions: GeneratedConfigurationParameters = { ...options }
-
     /**
      * Prevent the need for everyone to have to override the fetch API...
      */

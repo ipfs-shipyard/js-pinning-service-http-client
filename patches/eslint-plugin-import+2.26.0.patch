@@ -46,123 +46,308 @@ index 247818e..21a8f63 100644
    'warnings': require('../config/warnings'),
 diff --git a/node_modules/eslint-plugin-import/lib/rules/esm-extensions.js b/node_modules/eslint-plugin-import/lib/rules/esm-extensions.js
 new file mode 100644
-index 0000000..e2f855a
+index 0000000..5cdd2ad
 --- /dev/null
 +++ b/node_modules/eslint-plugin-import/lib/rules/esm-extensions.js
-@@ -0,0 +1,116 @@
-+'use strict'
-+
-+
-+
-+
-+var _resolve = require('eslint-module-utils/resolve');
-+var _resolve2 = _interopRequireDefault(_resolve)
-+var _ModuleCache = require('eslint-module-utils/ModuleCache');
-+var _ModuleCache2 = _interopRequireDefault(_ModuleCache)
-+var _moduleVisitor = require('eslint-module-utils/moduleVisitor');
-+var _moduleVisitor2 = _interopRequireDefault(_moduleVisitor)
-+var _docsUrl = require('../docsUrl');
-+var _docsUrl2 = _interopRequireDefault(_docsUrl);
-+function _interopRequireDefault(obj) {
-+  return obj && obj.__esModule ? obj : { 'default': obj }
-+}
-+/**
-+* @fileOverview Ensures that an imported path exists, given resolution rules.
-+* @author Ben Mosher
-+*/module.exports = {
-+  meta: {
-+    type: 'problem',
-+    docs: {
-+      url: (0, _docsUrl2['default'])('no-unresolved')
-+    },
-+
-+
-+    schema: [
-+      (0, _moduleVisitor.makeOptionsSchema)({
-+        caseSensitive: { type: 'boolean', 'default': true },
-+        caseSensitiveStrict: { type: 'boolean', 'default': false }
-+      })]
-+  },
-+
-+
-+
-+
-+  create: function (context) {
-+      var options = context.options[0] || {}
-+      console.dir(context)
-+
-+
-+      // function checkSourceValue(source, node) {
-+      //   context.report(
-+      //       source, 'TEST ERROR MESSAGE \'' + String(
-+      //         source.value) + '\'.')
-+      //   // ignore type-only imports
-+      //   if (node.importKind === 'type') {
-+      //     return
-+      //   }
-+
-+      //   var caseSensitive = !_resolve.CASE_SENSITIVE_FS && options.caseSensitive !== false
-+      //   var caseSensitiveStrict = !_resolve.CASE_SENSITIVE_FS && options.caseSensitiveStrict
-+
-+      //   var resolvedPath = (0, _resolve2['default'])(source.value, context)
-+
-+      //   if (resolvedPath === undefined) {
-+      //     context.report(
-+      //       source, 'Unable to resolve path to module \'' + String(
-+      //         source.value) + '\'.')
-+
-+      //   } else if (caseSensitive || caseSensitiveStrict) {
-+      //     var cacheSettings = _ModuleCache2['default'].getSettings(context.settings)
-+      //     if (!(0, _resolve.fileExistsWithCaseSync)(resolvedPath, cacheSettings, caseSensitiveStrict)) {
-+      //       context.report(
-+      //         source, 'Casing of ' + String(
-+      //           source.value) + ' does not match the underlying filesystem.')
-+
-+      //     }
-+      //   }
-+      // }
-+      const sourceCode = context.getSourceCode();
-+
-+
-+      return {
-+        // ...(0, _moduleVisitor2['default'])(checkSourceValue, options),
-+        ExportDeclaration: function (node) {
-+
-+        },
-+        ImportDeclaration: function (node) {
-+          // console.log(`sourceCode.getText(node): `, sourceCode.getText(node));
-+
-+          console.log(`node.importKind: `, node.importKind);
-+          const importedPath = node.source.value
-+          if (importedPath[0] !== '.') {
-+            console.log(`importedPath of '${importedPath}' is not relative, aborting rule early.`)
-+            return
-+          }
-+          const nodeSource = sourceCode.getText(node)
-+          node.specifiers.forEach((specifier) => {
-+          console.log(`specifier.type: `, specifier.type);
-+
-+          const importedObjectName = specifier.imported?.name
-+          const localObjectName = specifier.local?.name
-+          if (importedObjectName == null || localObjectName == null) {
-+            console.log('importedObjectName is undefined, check out the specifier', specifier)
-+          } else {
-+            const wasRenamed = localObjectName && localObjectName !== localObjectName
-+            console.log(`was ${importedObjectName} renamed to ${localObjectName} ?: ${wasRenamed ? 'yes' : 'no'}!`)
-+          }
-+          })
-+          // console.log('ImportDeclaration node', node)
-+          // console.log('ImportDeclaration node.parent.body', node.parent.body)
-+          // console.log('ImportDeclaration node.specifiers', node.specifiers)
-+            // console.log('ImportDeclaration node.source.value: ', node.source.value);
-+            context.report({
-+                message: "ImportDeclaration source:  ".concat(nodeSource),
-+                node: node
-+            });
-+        },
-+        // ImportDefaultSpecifier: function (node) {
-+        //   console.log('ImportDefaultSpecifier node', node)
-+        // },
-+      }
+@@ -0,0 +1,300 @@
++"use strict";
++var __assign = (this && this.__assign) || function () {
++    __assign = Object.assign || function(t) {
++        for (var s, i = 1, n = arguments.length; i < n; i++) {
++            s = arguments[i];
++            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
++                t[p] = s[p];
++        }
++        return t;
++    };
++    return __assign.apply(this, arguments);
++};
++var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
++    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
++    return new (P || (P = Promise))(function (resolve, reject) {
++        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
++        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
++        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
++        step((generator = generator.apply(thisArg, _arguments || [])).next());
++    });
++};
++var __generator = (this && this.__generator) || function (thisArg, body) {
++    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
++    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
++    function verb(n) { return function (v) { return step([n, v]); }; }
++    function step(op) {
++        if (f) throw new TypeError("Generator is already executing.");
++        while (_) try {
++            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
++            if (y = 0, t) op = [op[0] & 2, t.value];
++            switch (op[0]) {
++                case 0: case 1: t = op; break;
++                case 4: _.label++; return { value: op[1], done: false };
++                case 5: _.label++; y = op[1]; op = [0]; continue;
++                case 7: op = _.ops.pop(); _.trys.pop(); continue;
++                default:
++                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
++                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
++                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
++                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
++                    if (t[2]) _.ops.pop();
++                    _.trys.pop(); continue;
++            }
++            op = body.call(thisArg, _);
++        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
++        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
 +    }
-+}
++};
++var fs_1 = require("fs");
++var path_1 = require("path");
++var extensions = ['.js', '.ts', '.mjs', '.cjs'];
++extensions.push.apply(extensions, extensions.map(function (ext) { return "/index".concat(ext); }));
++// TypeScript Guards
++var isSimpleLiteralCallee = function (callee) { return callee != null && callee.type === 'Identifier' && callee.name != null; };
++// ReportFixers
++var convertRequireToImport = function (fixer) {
++    var fix = {
++        range: [0, 0],
++        text: ''
++    };
++    return fix;
++};
++// util functions
++var fileExists = function (filePath) {
++    try {
++        (0, fs_1.accessSync)(filePath);
++        return true;
++    }
++    catch (err) {
++        if ((err === null || err === void 0 ? void 0 : err.code) === 'ENOENT') {
++            // known and somewhat expected failure case.
++            return false;
++        }
++        console.error('Unexpected error attempting to access filepath', filePath);
++        console.error(err);
++        return false;
++    }
++};
++var excludeParenthesisFromTokenLocation = function (token) {
++    if (token.range == null || token.loc == null) {
++        return token;
++    }
++    var rangeStart = token.range[0] + 1;
++    var rangeEnd = token.range[1] - 1;
++    var locColStart = token.loc.start.column + 1;
++    var locColEnd = token.loc.end.column - 1;
++    var newToken = __assign(__assign({}, token), { range: [rangeStart, rangeEnd], loc: {
++            start: __assign(__assign({}, token.loc.start), { column: locColStart }),
++            end: __assign(__assign({}, token.loc.end), { column: locColEnd }),
++        } });
++    return newToken;
++};
++var getVariableDeclarationListener = function (_a) {
++    var context = _a.context, sourceCode = _a.sourceCode;
++    return function (node) {
++        return __awaiter(this, void 0, void 0, function () {
++            var nodeSource;
++            return __generator(this, function (_a) {
++                nodeSource = sourceCode.getText(node);
++                if (nodeSource.match(/= require\([^)]+\)/)) {
++                    // console.log(`VariableDeclaration.sourceCode: `, nodeSource);
++                    // console.log(`node.kind: `, node.kind);
++                    // console.log(`node.type: `, node.type);
++                    // console.log(`node.declarations: `, node.declarations);
++                    node.declarations.forEach(function (declaration) {
++                        // console.log(`declaration.init: `, declaration.init);
++                        if (declaration.init && declaration.init.type === 'CallExpression') {
++                            var callee = declaration.init.callee;
++                            if (isSimpleLiteralCallee(callee) && callee.name === 'require') {
++                                context.report({
++                                    message: "Do not use require inside of ESM modules",
++                                    node: node,
++                                    suggest: [
++                                        {
++                                            desc: 'Switch to an import statement',
++                                            fix: convertRequireToImport,
++                                        },
++                                    ]
++                                });
++                            }
++                        }
++                    });
++                }
++                return [2 /*return*/];
++            });
++        });
++    };
++};
++getVariableDeclarationListener;
++// Rule
++var esmExtensionsRule = {
++    meta: {
++        hasSuggestions: true,
++        fixable: 'code'
++    },
++    create: function (context) {
++        // console.log()
++        // console.log('---start of file---')
++        // console.log(`context.settings: `, context.settings);
++        var cwd = context.getCwd();
++        // console.log(`cwd: `, cwd);
++        var sourceCode = context.getSourceCode();
++        sourceCode.ast;
++        var filename = context.getFilename();
++        // console.log(`filename: `, filename);
++        var relativeFilePath = (0, path_1.relative)(cwd, filename);
++        // console.log(`relativeFilePath: `, relativeFilePath);
++        var relativeSourceFileDir = (0, path_1.dirname)(relativeFilePath);
++        // console.log(`relativeSourceFileDir: `, relativeSourceFileDir);
++        var absoluteSourceFileDir = (0, path_1.resolve)(cwd, relativeSourceFileDir);
++        // console.log(`absoluteSourceFileDir: `, absoluteSourceFileDir);
++        var listeners = {
++            // ImportDeclaration: (node: ESTree.ImportDeclaration & Rule.NodeParentExtension) => {
++            //   console.log('ImportDeclaration node.source.value: ', node.source.value)
++            //   context.report({
++            //     message: `ImportDeclaration node.source.value:  ${node.source.value as string}`,
++            //     node
++            //   })
++            // },
++            ExportDeclaration: function (node) {
++            },
++            VariableDeclaration: getVariableDeclarationListener({ context: context, sourceCode: sourceCode }),
++            ImportDeclaration: function (node) {
++                // console.log()
++                // console.log(`sourceCode.getText(node): `, sourceCode.getText(node));
++                // console.log(`node.type: `, node.type);
++                // console.log(`node.importKind: `, node.importKind);
++                var importedPath = node.source.value;
++                if (typeof importedPath !== 'string' || importedPath[0] !== '.') {
++                    // console.log(`importedPath of '${importedPath}' is not relative import, aborting rule early.`)
++                    return;
++                }
++                // console.log()
++                // console.log(`importedPath: `, importedPath);
++                var importHasJsExtension = importedPath.match(/\.js$/);
++                // console.log(`importHasJsExtension: `, importHasJsExtension);
++                // if (!importHasJsExtension) {
++                //   context.report({
++                //     message: 'ESM imports require absolute filepaths including extensions. Use ".js" even for typescript files.',
++                //     node,
++                //   })
++                //   return
++                // }
++                // console.log(`join(relativeSourceFileDir, importedPath): `, join(relativeSourceFileDir, importedPath));
++                var importedFileAbsolutePath = (0, path_1.resolve)(absoluteSourceFileDir, importedPath);
++                var correctImportAbsolutePath = null;
++                if (importHasJsExtension == null) {
++                    // no extension, try different ones.
++                    try {
++                        for (var _i = 0, extensions_1 = extensions; _i < extensions_1.length; _i++) {
++                            var ext = extensions_1[_i];
++                            // console.log(`ext: `, ext);
++                            var path = "".concat(importedFileAbsolutePath).concat(ext);
++                            // console.log(`path: `, path);
++                            if (fileExists(path)) {
++                                correctImportAbsolutePath = path;
++                                break;
++                            }
++                        }
++                    }
++                    catch (err) {
++                        console.error(err);
++                    }
++                }
++                else {
++                    // extension exists, try to access it.
++                    try {
++                        if (fileExists(importedFileAbsolutePath)) {
++                            correctImportAbsolutePath = importedFileAbsolutePath;
++                        }
++                        else {
++                            // console.log('throwing error')
++                            throw new Error('Not implemented');
++                        }
++                    }
++                    catch (err) {
++                        console.error(err);
++                    }
++                }
++                // console.log(`importedFileAbsolutePath: `, importedFileAbsolutePath);
++                // console.log(`correctImportAbsolutePath: `, correctImportAbsolutePath);
++                if (correctImportAbsolutePath == null) {
++                    context.report({
++                        message: "Could not determine whether current import path of '".concat(importedPath, "' is valid or not"),
++                        node: node
++                    });
++                }
++                else {
++                    if (importedFileAbsolutePath !== correctImportAbsolutePath) {
++                        var correctImportPath_1 = (0, path_1.relative)(absoluteSourceFileDir, correctImportAbsolutePath);
++                        // console.log(node.source.loc?.start)
++                        // console.log(`node.source.loc: `, node.source.loc);
++                        // console.log(`node.source.loc?.start: `, node.source.loc?.start);
++                        // console.log(`node.source.loc?.end: `, node.source.loc?.end);
++                        // console.log('node', node)
++                        context.report({
++                            message: "Invalid ESM import of '".concat(importedPath, "'."),
++                            node: node,
++                            suggest: [
++                                {
++                                    desc: "Use '".concat(correctImportPath_1, "' instead."),
++                                    fix: function (fixer) {
++                                        return fixer.replaceText(node.source, correctImportPath_1);
++                                    }
++                                }
++                            ],
++                            fix: function (fixer) {
++                                return fixer.replaceText(excludeParenthesisFromTokenLocation(node.source), correctImportPath_1);
++                            }
++                        });
++                    }
++                }
++                // resolve(dir)
++                // console.log(`relative(__dirname, relativeSourceFileDir): `, relative(__dirname, relativeSourceFileDir));
++                // console.log(`"${filename}" is importing "${importedPath}" from directory "${relativeSourceFileDir}"`);
++                // console.log(`resolve(relativeSourceFileDir, importedPath): `, resolve(__dirname, relativeSourceFileDir, importedPath));
++                // console.log(`importedPath: `, importedPath);
++                // const nodeSource = sourceCode.getText(node)
++                // node.specifiers.forEach((specifier) => {
++                //   // console.log(`specifier.type: `, specifier.type);
++                //   if ((specifier as ImportSpecifier).imported !== null) {
++                //     const importedObjectName = (specifier as ImportSpecifier).imported?.name
++                //     const localObjectName = specifier.local?.name
++                //     if (importedObjectName == null || localObjectName == null) {
++                //       console.log('importedObjectName is undefined, check out the specifier', specifier)
++                //     } else {
++                //       const wasRenamed = localObjectName != null && importedObjectName !== localObjectName
++                //       console.log(`was ${importedObjectName} renamed to ${localObjectName} ? ${wasRenamed ? 'yes' : 'no'}!`)
++                //     }
++                //   }
++                // })
++                // console.log('ImportDeclaration node', node)
++                // console.log('ImportDeclaration node.parent.body', node.parent.body)
++                // console.log('ImportDeclaration node.specifiers', node.specifiers)
++                // console.log('ImportDeclaration node.source.value: ', node.source.value);
++                // context.report({
++                //     message: "ImportDeclaration source:  ".concat(nodeSource),
++                //     node
++                // });
++            },
++            // ImportD'efaultSpecifier: (node: ESTree.ImportDefaultSpecifier & Rule.NodeParentExtension) => {
++            //   console.log('ImportDeclaration node.source.value: ', node.source.value)
++            // },
++            // ImportExpression: (node: ESTree.ImportExpression & Rule.NodeParentExtension) => {
++            //   console.log('ImportDeclaration node.source.value: ', node.source.range)
++            // },
++            // ImportNamespaceSpecifier: (node: ESTree.ImportNamespaceSpecifier & Rule.NodeParentExtension) => {
++            //   console.log('ImportDeclaration node.source.value: ', node.source.value)
++            // },
++            // ImportSpecifier: (node: ESTree.ImportSpecifier & Rule.NodeParentExtension) => {
++            //   console.log('ImportDeclaration node.source.value: ', node.source.value)
++            // }
++            // onCodePathStart: (codePath: Rule.CodePath, node: Rule.Node) => {
++            // }
++        };
++        return listeners;
++    }
++};
++module.exports = esmExtensionsRule;
++//# sourceMappingURL=esm-extensions.js.map
+\ No newline at end of file

@@ -1,9 +1,10 @@
 import fetchPonyfill from 'fetch-ponyfill'
 
-import { Configuration as GeneratedConfiguration } from '../dist.generated/index.js'
+import { Configuration as GeneratedConfiguration } from '../dist.generated'
 import type { ConfigurationParameters as GeneratedConfigurationParameters } from '../dist.generated/index.js'
 import { PinsApi as RemotePinningServiceClient } from '../dist.generated/apis/index.js'
 
+const foo = require('./test123')
 interface ConfigurationParameters extends Omit<GeneratedConfigurationParameters, 'basePath'>{
   endpointUrl?: string
 }

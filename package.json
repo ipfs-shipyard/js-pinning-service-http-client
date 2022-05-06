@@ -173,7 +173,8 @@
     "gen:node": "openapi-generator-cli generate --generator-key node",
     "gen:ts": "openapi-generator-cli generate --generator-key ts",
     "clean": "aegir clean",
-    "lint": "aegir lint"
+    "lint": "aegir lint",
+    "test-eslint-rule": "tsc -p tsconfig.rules.json && cp dist/config/eslint/rules/esm-extensions.js node_modules/eslint-plugin-import/lib/rules/esm-extensions.js && patch-package eslint-plugin-import && TIMING=1 eslint --no-eslintrc --plugin \"@typescript-eslint\" --plugin \"import\" --parser \"@typescript-eslint/parser\" --rule 'import/esm-extensions: \"error\"' --ignore-pattern 'node_modules/*' src/*.ts generated/fetch/src/*.ts"
   },
   "dependencies": {
     "fetch-ponyfill": "^7.1.0"

@@ -67,3 +67,9 @@ Licensed under either of
 Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 be dual licensed as above, without any additional terms or conditions.
+
+
+## Debug esm-extensions.ts rule with
+```bash
+tsc -p tsconfig.rules.json && cp dist/config/eslint/rules/esm-extensions.js node_modules/eslint-plugin-import/lib/rules/esm-extensions.js && patch-package eslint-plugin-import && TIMING=1 eslint --no-eslintrc --plugin "@typescript-eslint" --plugin "import" --parser "@typescript-eslint/parser" --rule 'import/esm-extensions: "error"' --ignore-pattern 'node_modules/*' src/*.ts generated/fetch/src/*.ts
+```

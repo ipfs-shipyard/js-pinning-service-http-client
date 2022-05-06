@@ -1,6 +1,5 @@
-/* eslint-disable no-console */
-import type { Rule, SourceCode } from 'eslint'
-import type { ImportDeclaration, ExportAllDeclaration, VariableDeclaration, SimpleLiteral, Expression , Super, Literal} from 'estree'
+import type { Rule } from 'eslint'
+import type { ImportDeclaration, VariableDeclaration, SimpleLiteral, Expression , Super, Literal, ExportAllDeclaration, ExportNamedDeclaration } from 'estree'
 import {  accessSync } from 'fs'
 import { resolve, dirname, relative } from 'path'
 
@@ -14,6 +13,12 @@ declare module 'estree' {
   }
 }
 
+interface GetListenerOptions {
+  context: Rule.RuleContext
+  name?: string
+}
+type ExportDeclaration = ExportAllDeclaration | ExportNamedDeclaration
+
 const extensions = ['.js', '.ts', '.mjs', '.cjs']
 extensions.push(...extensions.map((ext) => `/index${ext}`))
 
@@ -21,13 +26,8 @@ extensions.push(...extensions.map((ext) => `/index${ext}`))
 const isSimpleLiteralCallee = (callee: Expression | Super): callee is SimpleLiteral => callee != null && callee.type === 'Identifier' && (callee as unknown as SimpleLiteral).name != null
 
 // ReportFixers
-const convertRequireToImport: Rule.ReportFixer = (fixer) => {
-  const fix: Rule.Fix = {
-    range: [0,0],
-    text: ''
-  }
-
-  return fix
+const getEsmImportFixer = (tokenLiteral: Literal, updated: string): Rule.ReportFixer => (fixer) => {
+  return fixer.replaceText(excludeParenthesisFromTokenLocation(tokenLiteral), updated)
 }
 
 // util functions
@@ -67,213 +67,134 @@ const excludeParenthesisFromTokenLocation = (token: Literal): Literal => {
   return newToken
 }
 
-interface GetListenerOptions {
-  context: Rule.RuleContext
-  sourceCode: SourceCode
-}
-const getVariableDeclarationListener = ({ context, sourceCode }: GetListenerOptions) => async function (node: VariableDeclaration & Rule.NodeParentExtension) {
-          const nodeSource = sourceCode.getText(node)
-          if (nodeSource.match(/= require\([^)]+\)/)) {
-            // console.log(`VariableDeclaration.sourceCode: `, nodeSource);
-            // console.log(`node.kind: `, node.kind);
-            // console.log(`node.type: `, node.type);
-            // console.log(`node.declarations: `, node.declarations);
-            node.declarations.forEach((declaration) => {
-              // console.log(`declaration.init: `, declaration.init);
-              if (declaration.init && declaration.init.type === 'CallExpression') {
-                const { callee } = declaration.init
-                if (isSimpleLiteralCallee(callee) && callee.name === 'require') {
-                  context.report({
-                    message: "Do not use require inside of ESM modules",
-                    node,
-                    suggest: [
-                      {
-                        desc: 'Switch to an import statement',
-                        fix: convertRequireToImport,
-                      },
-                    ]
-                  })
-                }
-              }
-            })
-          }
+const handleNodeWithImport = (context: Rule.RuleContext, node: (ImportDeclaration | ExportDeclaration) & Rule.NodeParentExtension) => {
+  if (node.source == null) {
+    return
+  }
+  const importSource = node.source as Literal
+  const importedPath = importSource.value
+  if (typeof importedPath !== 'string' || importedPath[0] !== '.') {
+    return
+  }
+  const cwd = context.getCwd()
+  const filename = context.getFilename()
+  const relativeFilePath = relative(cwd, filename)
+  const relativeSourceFileDir = dirname(relativeFilePath)
+  const absoluteSourceFileDir = resolve(cwd, relativeSourceFileDir)
+  const importHasJsExtension = importedPath.match(/\.js$/)
+  const importedFileAbsolutePath = resolve(absoluteSourceFileDir, importedPath)
+
+  let correctImportAbsolutePath = null
+  if (importHasJsExtension == null) {
+    // no extension, try different ones.
+    try {
+
+      for (const ext of extensions) {
+        const path = `${importedFileAbsolutePath}${ext}`
+        if (fileExists(path)) {
+          correctImportAbsolutePath = path
+          break;
         }
-getVariableDeclarationListener
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  } else {
+    // extension exists, try to access it.
+    if (fileExists(importedFileAbsolutePath)) {
+      correctImportAbsolutePath = importedFileAbsolutePath
+    } else if (relativeFilePath.match(/\.ts/) != null) {
+
+      // if we're in a typescript repo and they're using .js extensions, they wont exist in the source.
+      const typescriptImportedFileAbsolutePath = importedFileAbsolutePath.replace(/\.js/, '.ts')
+      if (fileExists(typescriptImportedFileAbsolutePath)) {
+        correctImportAbsolutePath = importedFileAbsolutePath
+      } else {
+        console.log('importedFileAbsolutePath doesnt exist', importedFileAbsolutePath)
+        console.log('typescriptImportedFileAbsolutePath doesnt exist', typescriptImportedFileAbsolutePath)
+        console.log('node', node)
+        throw new Error('Workaround not implemented')
+      }
+    } else {
+      console.log('importedFileAbsolutePath doesnt exist', importedFileAbsolutePath)
+      console.log('And the file being checked is not a typescript file:', relativeFilePath)
+      throw new Error('Workaround not implemented')
+    }
+  }
+
+  const importOrExportLabel = node.type.match(/import/i) != null ? 'import of' : 'export from'
+
+  if (correctImportAbsolutePath == null) {
+    context.report({
+      message: `Could not determine whether current import path of '${importedPath}' is valid or not`,
+      node
+    })
+  } else {
+    if (importedFileAbsolutePath !== correctImportAbsolutePath) {
+      const correctImportPath = relative(absoluteSourceFileDir, correctImportAbsolutePath)
+      const suggestionDesc = `Use '${correctImportPath}' instead.`
+      const fix = getEsmImportFixer(importSource, correctImportPath)
+
+      context.report({
+        message: `Invalid ESM ${importOrExportLabel} '${importedPath}'. ${suggestionDesc}`,
+        node,
+        suggest: [
+          {
+            desc: suggestionDesc,
+            fix,
+          }
+        ],
+        fix,
+      })
+    }
+  }
+}
+
+// Rule Listeners
+const getVariableDeclarationListener = ({ context }: GetListenerOptions) => function (node: VariableDeclaration & Rule.NodeParentExtension) {
+  const sourceCode = context.getSourceCode()
+  const nodeSource = sourceCode.getText(node)
+  if (nodeSource.match(/= require\([^)]+\)/)) {
+    node.declarations.forEach((declaration) => {
+      if (declaration.init && declaration.init.type === 'CallExpression') {
+        const { callee } = declaration.init
+        if (isSimpleLiteralCallee(callee) && callee.name === 'require') {
+          context.report({
+            message: "Do not use require inside of ESM modules",
+            node,
+          })
+        }
+      }
+    })
+  }
+}
+
+const getImportDeclarationListener = ({context}: GetListenerOptions) => function (node: ImportDeclaration & Rule.NodeParentExtension) {
+  handleNodeWithImport(context, node)
+}
+
+const getExportDeclarationListener = ({context, name}: GetListenerOptions) => function (node: ExportDeclaration & Rule.NodeParentExtension) {
+  const sourceCode = context.getSourceCode()
+  const exportSource = sourceCode.getText(node)
+  if (exportSource.match(/ from /) == null) {
+    return
+  }
+  handleNodeWithImport(context, node)
+}
+
 // Rule
 const esmExtensionsRule: Rule.RuleModule = {
   meta: {
     hasSuggestions: true,
     fixable: 'code'
   },
-  create: (context: Rule.RuleContext) => {
-    // console.log()
-    // console.log('---start of file---')
-    // console.log(`context.settings: `, context.settings);
-    const cwd = context.getCwd()
-    // console.log(`cwd: `, cwd);
-    const sourceCode = context.getSourceCode();
-    sourceCode.ast
-    const filename = context.getFilename()
-    // console.log(`filename: `, filename);
-    const relativeFilePath = relative(cwd, filename)
-    // console.log(`relativeFilePath: `, relativeFilePath);
-    const relativeSourceFileDir = dirname(relativeFilePath)
-    // console.log(`relativeSourceFileDir: `, relativeSourceFileDir);
-    const absoluteSourceFileDir = resolve(cwd, relativeSourceFileDir)
-    // console.log(`absoluteSourceFileDir: `, absoluteSourceFileDir);
-
-    const listeners: Rule.RuleListener = {
-      // ImportDeclaration: (node: ESTree.ImportDeclaration & Rule.NodeParentExtension) => {
-      //   console.log('ImportDeclaration node.source.value: ', node.source.value)
-      //   context.report({
-      //     message: `ImportDeclaration node.source.value:  ${node.source.value as string}`,
-      //     node
-      //   })
-      // },
-      ExportDeclaration: function (node: ExportAllDeclaration & Rule.NodeParentExtension) {
-
-        },
-        VariableDeclaration: getVariableDeclarationListener({ context, sourceCode }),
-        ImportDeclaration: function (node: ImportDeclaration & Rule.NodeParentExtension) {
-          // console.log()
-          // console.log(`sourceCode.getText(node): `, sourceCode.getText(node));
-
-          // console.log(`node.type: `, node.type);
-          // console.log(`node.importKind: `, node.importKind);
-          const importedPath = node.source.value
-          if (typeof importedPath !== 'string' || importedPath[0] !== '.') {
-            // console.log(`importedPath of '${importedPath}' is not relative import, aborting rule early.`)
-            return
-          }
-          // console.log()
-          // console.log(`importedPath: `, importedPath);
-          const importHasJsExtension = importedPath.match(/\.js$/)
-          // console.log(`importHasJsExtension: `, importHasJsExtension);
-
-          // if (!importHasJsExtension) {
-          //   context.report({
-          //     message: 'ESM imports require absolute filepaths including extensions. Use ".js" even for typescript files.',
-          //     node,
-          //   })
-          //   return
-          // }
-
-          // console.log(`join(relativeSourceFileDir, importedPath): `, join(relativeSourceFileDir, importedPath));
-          const importedFileAbsolutePath = resolve(absoluteSourceFileDir, importedPath)
-          let correctImportAbsolutePath = null
-          if (importHasJsExtension == null) {
-            // no extension, try different ones.
-            try {
-
-              for (const ext of extensions) {
-                // console.log(`ext: `, ext);
-                const path = `${importedFileAbsolutePath}${ext}`
-                // console.log(`path: `, path);
-                if (fileExists(path)) {
-                  correctImportAbsolutePath = path
-                  break;
-                }
-              }
-            } catch (err) {
-              console.error(err)
-            }
-          } else {
-            // extension exists, try to access it.
-            try {
-
-            if (fileExists(importedFileAbsolutePath)) {
-              correctImportAbsolutePath = importedFileAbsolutePath
-            } else {
-              // console.log('throwing error')
-              throw new Error('Not implemented')
-            }
-            } catch (err) {
-              console.error(err)
-            }
-          }
-
-          // console.log(`importedFileAbsolutePath: `, importedFileAbsolutePath);
-          // console.log(`correctImportAbsolutePath: `, correctImportAbsolutePath);
-          if (correctImportAbsolutePath == null) {
-            context.report({
-              message: `Could not determine whether current import path of '${importedPath}' is valid or not`,
-              node
-            })
-          } else {
-            if (importedFileAbsolutePath !== correctImportAbsolutePath) {
-              const correctImportPath = relative(absoluteSourceFileDir, correctImportAbsolutePath)
-              // console.log(node.source.loc?.start)
-              // console.log(`node.source.loc: `, node.source.loc);
-              // console.log(`node.source.loc?.start: `, node.source.loc?.start);
-              // console.log(`node.source.loc?.end: `, node.source.loc?.end);
-              // console.log('node', node)
-              context.report({
-                message: `Invalid ESM import of '${importedPath}'.`,
-                node,
-                suggest: [
-                  {
-                    desc: `Use '${correctImportPath}' instead.`,
-                    fix: (fixer) => {
-                      return fixer.replaceText(node.source, correctImportPath)
-                    }
-                  }
-                ],
-                fix: (fixer) => {
-                  return fixer.replaceText(excludeParenthesisFromTokenLocation(node.source), correctImportPath)
-                }
-              })
-            }
-          }
-          // resolve(dir)
-          // console.log(`relative(__dirname, relativeSourceFileDir): `, relative(__dirname, relativeSourceFileDir));
-          // console.log(`"${filename}" is importing "${importedPath}" from directory "${relativeSourceFileDir}"`);
-          // console.log(`resolve(relativeSourceFileDir, importedPath): `, resolve(__dirname, relativeSourceFileDir, importedPath));
-          // console.log(`importedPath: `, importedPath);
-          // const nodeSource = sourceCode.getText(node)
-
-          // node.specifiers.forEach((specifier) => {
-          //   // console.log(`specifier.type: `, specifier.type);
-
-          //   if ((specifier as ImportSpecifier).imported !== null) {
-
-          //     const importedObjectName = (specifier as ImportSpecifier).imported?.name
-          //     const localObjectName = specifier.local?.name
-          //     if (importedObjectName == null || localObjectName == null) {
-          //       console.log('importedObjectName is undefined, check out the specifier', specifier)
-          //     } else {
-          //       const wasRenamed = localObjectName != null && importedObjectName !== localObjectName
-          //       console.log(`was ${importedObjectName} renamed to ${localObjectName} ? ${wasRenamed ? 'yes' : 'no'}!`)
-          //     }
-          //   }
-          // })
-
-          // console.log('ImportDeclaration node', node)
-          // console.log('ImportDeclaration node.parent.body', node.parent.body)
-          // console.log('ImportDeclaration node.specifiers', node.specifiers)
-            // console.log('ImportDeclaration node.source.value: ', node.source.value);
-            // context.report({
-            //     message: "ImportDeclaration source:  ".concat(nodeSource),
-            //     node
-            // });
-        },
-      // ImportD'efaultSpecifier: (node: ESTree.ImportDefaultSpecifier & Rule.NodeParentExtension) => {
-      //   console.log('ImportDeclaration node.source.value: ', node.source.value)
-      // },
-      // ImportExpression: (node: ESTree.ImportExpression & Rule.NodeParentExtension) => {
-      //   console.log('ImportDeclaration node.source.value: ', node.source.range)
-      // },
-      // ImportNamespaceSpecifier: (node: ESTree.ImportNamespaceSpecifier & Rule.NodeParentExtension) => {
-      //   console.log('ImportDeclaration node.source.value: ', node.source.value)
-      // },
-      // ImportSpecifier: (node: ESTree.ImportSpecifier & Rule.NodeParentExtension) => {
-      //   console.log('ImportDeclaration node.source.value: ', node.source.value)
-      // }
-      // onCodePathStart: (codePath: Rule.CodePath, node: Rule.Node) => {
-
-      // }
-    }
-    return listeners
-  }
+  create: (context: Rule.RuleContext) => ({
+      VariableDeclaration: getVariableDeclarationListener({ context }),
+      ExportAllDeclaration: getExportDeclarationListener({context, name: 'ExportAllDeclaration'}),
+      ExportDeclaration: getExportDeclarationListener({context, name: 'ExportDeclaration'}),
+      ExportNamedDeclaration: getExportDeclarationListener({context, name: 'ExportNamedDeclaration'}),
+      ImportDeclaration: getImportDeclarationListener({context}),
+  })
 }
 
 // @ts-ignore

@@ -1,8 +1,23 @@
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * Simple spacing while doing screen recording.
+ */
 import fetchPonyfill from 'fetch-ponyfill'
 
-import { Configuration as GeneratedConfiguration } from '../dist.generated'
-import type { ConfigurationParameters as GeneratedConfigurationParameters } from '../dist.generated/index.js'
-import { PinsApi as RemotePinningServiceClient } from '../dist.generated/apis/index.js'
+import { Configuration as GeneratedConfiguration } from '../dist.generated/index.js' // <-- Note the lack of extension prior to running eslint fix.
+import type { ConfigurationParameters as GeneratedConfigurationParameters } from '../dist.generated/index.js' // <-- Note the lack of extension prior to running eslint fix.
+import { PinsApi as RemotePinningServiceClient } from '../dist.generated/apis/index.js' // <-- Note the lack of extension prior to running eslint fix.
 
 const foo = require('./test123')
 interface ConfigurationParameters extends Omit<GeneratedConfigurationParameters, 'basePath'>{

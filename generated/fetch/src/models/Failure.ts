@@ -18,7 +18,7 @@ import {
     FailureErrorFromJSON,
     FailureErrorFromJSONTyped,
     FailureErrorToJSON,
-} from './FailureError';
+} from './FailureError.js';
 
 /**
  * Response for a failed request

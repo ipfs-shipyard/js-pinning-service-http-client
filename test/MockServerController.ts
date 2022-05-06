@@ -5,7 +5,6 @@ import cors from 'cors'
 import { MockServer } from './MockServer.js'
 import { logger } from './logger.js'
 
-logger.info('Loading MockServerController module')
 /**
  * MockServerController stands up a server on port 3000
  */
@@ -17,7 +16,8 @@ class MockServerController {
   private readonly port = 3000
   server: import('http').Server
   constructor () {
-    logger.debug('MockServerController: Constructing')
+    this.shutdown.bind(this)
+    this.shutdownSync.bind(this)
     this.router.get<'/start', {port?: string}>('/start', async (req, res, next) => { // eslint-disable-line @typescript-eslint/no-misused-promises
       logger.debug('MockServerController: /start GET request received')
       const { port } = req.params

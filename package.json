@@ -44,6 +44,7 @@
   "files": [
     "src",
     "dist/src",
+    "dist/dist.generated",
     "!dist/test",
     "!**/*.tsbuildinfo"
   ],
@@ -151,9 +152,11 @@
     "fix:lint": "aegir lint --fix",
     "release": "aegir release",
     "postinstall": "run-s gen",
+    "prepareAegir": "run-p pretest",
+    "prebuild": "run-p prepareAegir postgen",
     "build": "aegir build",
     "build-todo:docs": "aegir docs -p false",
-    "postbuild": "cp-cli dist.generated dist/dist.generated",
+    "TMP-postbuild": "cp-cli dist.generated dist/dist.generated",
     "pretest": "tsc -p tsconfig.MockServerController.json",
     "test": "run-s test:*",
     "test:node": "aegir test -t node --cov",

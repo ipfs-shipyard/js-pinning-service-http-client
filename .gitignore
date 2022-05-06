@@ -21,3 +21,4 @@ docs
 .env
 dist.test
 logs
+.tsbuildinfo*

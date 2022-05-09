@@ -1,20 +1,41 @@
 {
   "root": true,
-  "plugins": ["import"],
-  "extends": ["plugin:import/recommended-esm"],
-  "rules": {
-    "esm-extensions": "error"
-  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "import"],
+  "extends": ["ipfs"],
   "overrides": [
     {
-      "parser": "@typescript-eslint/parser",
-      "plugins": ["@typescript-eslint", "import"],
-      "extends": ["plugin:import/recommended-esm"],
-      "files": "./src/**/*.ts",
+      "parserOptions": {
+        "project": "tsconfig.json"
+      },
+      "files": [
+        "./src/**/*.ts",
+        "./types/**/*.ts"
+      ],
       "rules": {
-        "import/esm-extensions": "error"
+        "@typescript-eslint/strict-boolean-expressions": "off"
+      }
+    },
+    {
+      "parserOptions": {
+        "project": ["tsconfig.MockServerController.json", "tsconfig.json"]
+      },
+      "files": "./test/**/*.ts"
+    },
+    {
+      "extends": [],
+      "parserOptions": {
+        "project": "tsconfig.generated.json"
+      },
+      "files": "./generated/fetch/src/**/*.ts",
+      "rules": {
+        "semi": "off",
+        "indent": "off",
+        "no-unused-vars": "off",
+        "no-undef": "off",
+        "@typescript-eslint/strict-boolean-expressions": "off"
       }
     }
   ],
-  "ignorePatterns": ["generated/**/*.{j,t}s", "dist.generated/**/*.{j,t}s", "dist/**/*.{j,t}s"]
+  "ignorePatterns": ["*.js", "dist/**/*.d.ts", "dist.generated/**/*.d.ts", "dist.generated/**/*.{j,t}s", "dist/**/*.j,t}s"]
 }

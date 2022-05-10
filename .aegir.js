@@ -1,17 +1,11 @@
-require('ts-node').register({
-  project: 'tsconfig.json',
-})
-
-const { MockServerController } = require('./test/MockServerController')
-
+import { MockServerController } from './dist/test/MockServerController.js'
 
 /** @type {import('aegir').PartialOptions} */
-module.exports = {
+const config = {
   docs: {
     publish: true,
     entryPoint: './'
   },
-  tsRepo: true,
   build: {
     config: {
       platform: 'node'
@@ -19,6 +13,8 @@ module.exports = {
     bundlesizeMax: '44KB'
   },
   test: {
+    build: false,
+    progress: true,
     cov: false,
     async before () {
       return {
@@ -29,12 +25,13 @@ module.exports = {
       }
     },
     /**
-     *
-     * @param {GlobalOptions & TestOptions} _
-     * @param {MockServerController} controller
+     * @param {import('aegir').GlobalOptions & import('aegir').TestOptions} _
+     * @param { {controller: MockServerController} } beforeResult
      */
     async after (_, {controller}) {
       await controller.shutdown()
     }
   }
 }
+
+export default config

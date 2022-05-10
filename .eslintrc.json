@@ -1,0 +1,41 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "import"],
+  "extends": ["ipfs"],
+  "overrides": [
+    {
+      "parserOptions": {
+        "project": "tsconfig.json"
+      },
+      "files": [
+        "./src/**/*.ts",
+        "./types/**/*.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/strict-boolean-expressions": "off"
+      }
+    },
+    {
+      "parserOptions": {
+        "project": ["tsconfig.MockServerController.json", "tsconfig.json"]
+      },
+      "files": "./test/**/*.ts"
+    },
+    {
+      "extends": [],
+      "parserOptions": {
+        "project": "tsconfig.generated.json"
+      },
+      "files": "./generated/fetch/src/**/*.ts",
+      "rules": {
+        "semi": "off",
+        "indent": "off",
+        "no-unused-vars": "off",
+        "no-undef": "off",
+        "@typescript-eslint/strict-boolean-expressions": "off"
+      }
+    }
+  ],
+  "ignorePatterns": ["*.js", "dist/**/*.d.ts", "dist.generated/**/*.d.ts", "dist.generated/**/*.{j,t}s", "dist/**/*.j,t}s"]
+}

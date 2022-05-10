@@ -1,3 +1,3 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './PinsApi';
+export * from './PinsApi.js';

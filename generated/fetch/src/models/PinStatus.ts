@@ -12,19 +12,19 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime.js';
 import {
     Pin,
     PinFromJSON,
     PinFromJSONTyped,
     PinToJSON,
-} from './Pin';
+} from './Pin.js';
 import {
     Status,
     StatusFromJSON,
     StatusFromJSONTyped,
     StatusToJSON,
-} from './Status';
+} from './Status.js';
 
 /**
  * Pin object with status

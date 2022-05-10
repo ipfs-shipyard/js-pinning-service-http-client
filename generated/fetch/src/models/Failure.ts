@@ -12,13 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime.js';
 import {
     FailureError,
     FailureErrorFromJSON,
     FailureErrorFromJSONTyped,
     FailureErrorToJSON,
-} from './FailureError';
+} from './FailureError.js';
 
 /**
  * Response for a failed request

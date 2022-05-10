@@ -12,13 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { exists, mapValues } from '../runtime.js';
 import {
     PinStatus,
     PinStatusFromJSON,
     PinStatusFromJSONTyped,
     PinStatusToJSON,
-} from './PinStatus';
+} from './PinStatus.js';
 
 /**
  * Response used for listing pin objects matching request

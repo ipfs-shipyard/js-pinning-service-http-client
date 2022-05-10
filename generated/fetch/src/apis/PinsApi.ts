@@ -13,7 +13,7 @@
  */
 
 
-import * as runtime from '../runtime';
+import * as runtime from '../runtime.js';
 import {
     Failure,
     FailureFromJSON,
@@ -33,7 +33,7 @@ import {
     TextMatchingStrategy,
     TextMatchingStrategyFromJSON,
     TextMatchingStrategyToJSON,
-} from '../models';
+} from '../models/index.js';
 
 export interface PinsGetRequest {
     cid?: Set<string>;

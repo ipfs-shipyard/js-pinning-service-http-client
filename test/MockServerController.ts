@@ -1,8 +1,9 @@
 import express from 'express'
-import { MockServer } from './MockServer'
 import Router from 'express-promise-router'
 import cors from 'cors'
-import { logger } from './logger'
+
+import { MockServer } from './MockServer.js'
+import { logger } from './logger.js'
 
 /**
  * MockServerController stands up a server on port 3000
@@ -15,7 +16,10 @@ class MockServerController {
   private readonly port = 3000
   server: import('http').Server
   constructor () {
+    this.shutdown.bind(this)
+    this.shutdownSync.bind(this)
     this.router.get<'/start', {port?: string}>('/start', async (req, res, next) => { // eslint-disable-line @typescript-eslint/no-misused-promises
+      logger.debug('MockServerController: /start GET request received')
       const { port } = req.params
 
       let mockServer: MockServer | null = null
@@ -42,6 +46,7 @@ class MockServerController {
      */
     this.router.get<'/stop/:port', {port: string}>('/stop/:port', async (req, res, next) => { // eslint-disable-line @typescript-eslint/no-misused-promises
       const { port } = req.params
+      logger.debug(`MockServerController: /stop/${port.toString()} GET request received`)
 
       const mockServer = this.mockServers.find((mockS) => mockS.basePath.includes(port))
 

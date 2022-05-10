@@ -1,7 +1,7 @@
 /* eslint-env browser, node, mocha */
+import { expect } from 'aegir/chai'
 
-import { expect } from 'aegir/utils/chai'
-import { Configuration, ConfigurationParameters } from '../src'
+import { Configuration, ConfigurationParameters } from '../src/index.js'
 
 // export default async (setup: () => Promise<unknown>) => {
 describe('Configuration', () => {

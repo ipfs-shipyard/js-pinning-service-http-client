@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './Failure';
-export * from './FailureError';
-export * from './Pin';
-export * from './PinResults';
-export * from './PinStatus';
-export * from './Status';
-export * from './TextMatchingStrategy';
+export * from './Failure.js';
+export * from './FailureError.js';
+export * from './Pin.js';
+export * from './PinResults.js';
+export * from './PinStatus.js';
+export * from './Status.js';
+export * from './TextMatchingStrategy.js';

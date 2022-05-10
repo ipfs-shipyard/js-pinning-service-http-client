@@ -1,37 +1,37 @@
 /* eslint-env browser, node, mocha */
-
-import { expect } from 'aegir/utils/chai'
-import { Configuration, RemotePinningServiceClient, Status } from '../src'
-import type { Pin } from '../src'
 import fetchPonyfill from 'fetch-ponyfill'
+
+import { expect } from 'aegir/chai'
+
+import { Configuration, RemotePinningServiceClient, Status } from '../src/index.js'
+import type { Pin } from '../src/index.js'
 
 const { fetch } = fetchPonyfill()
 
 let Config = new Configuration({
   endpointUrl: 'http://127.0.0.1:3000',
-  // fetchApi: fetch,
   accessToken: process.env.MOCK_PINNING_SERVER_SECRET
 })
+
 describe('Client', () => {
   it('Can be instantiated', () => {
     expect(() => new RemotePinningServiceClient(Config)).not.to.throw()
   })
 
   describe('Operations', () => {
-    // let mockServer: MockServer
-    // let Config: Configuration
     beforeEach(async () => {
       const response = await fetch('http://localhost:3000/start')
       const { endpointUrl, accessToken } = await response.json()
       Config = new Configuration({
         endpointUrl,
         accessToken
-        // fetchApi: fetch
       })
     })
 
     afterEach(async () => {
-      const [,,port] = Config.basePath.split(':')
+      const basePathParts = Config.basePath.split(':')
+      // explicitly set port as string because '@typescript-eslint/restrict-template-expressions' is broken.
+      const port: string = basePathParts[2]
       const response = await fetch(`http://localhost:3000/stop/${port}`)
 
       const { success } = await response.json()
@@ -70,4 +70,3 @@ describe('Client', () => {
     })
   })
 })
-// }

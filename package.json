@@ -23,27 +23,41 @@
     "node": ">=16.0.0",
     "npm": ">=7.0.0"
   },
-  "main": "src/index.ts",
-  "types": "dist/src/index.d.ts",
+  "type": "module",
+  "types": "./dist/src/index.d.ts",
   "typesVersions": {
     "*": {
       "*": [
         "*",
         "dist/*",
-        "dist/src/*"
+        "dist/src/*",
+        "dist/src/*/index"
       ],
       "src/*": [
         "*",
         "dist/*",
-        "dist/src/*"
+        "dist/src/*",
+        "dist/src/*/index"
       ]
     }
   },
   "files": [
     "src",
-    "dist",
-    "dist.generated"
+    "dist/src",
+    "dist/dist.generated",
+    "!dist/test",
+    "!**/*.tsbuildinfo"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/src/index.js",
+      "require": "./dist/src/index.js"
+    },
+    "./api/apis": {
+      "import": "./dist/dist.generated/apis",
+      "require": "./dist/dist.generated/apis"
+    }
+  },
   "eslintConfig": {
     "extends": "ipfs",
     "parserOptions": {
@@ -132,33 +146,35 @@
     ]
   },
   "scripts": {
-    "clean": "npx rimraf dist generated node_modules .swc",
     "ci:test": "run-s test:*",
-    "dep-check": "aegir dep-check src/**/*.ts test/**/*.ts generated/**/*.ts",
+    "dep-check": "aegir dep-check dist/**/*.js -- --ignore @openapitools/openapi-generator-cli @typescript-eslint/eslint-plugin @typescript-eslint/parser",
     "fix": "run-s fix:*",
     "fix:lint": "aegir lint --fix",
-    "lint": "run-s lint:*",
-    "lint:main": "aegir lint",
-    "lint:ts": "aegir ts -p check",
-    "lint-TODO:project": "check-aegir-project # currently broken due to corrupting the repoUrl",
     "release": "aegir release",
-    "postinstall": "run-s gen",
-    "build": "run-s build:* && cp-cli dist.generated dist/dist.generated",
+    "postinstall": "run-p prepareAegir",
+    "prepareAegir": "run-p pretest build:generated",
+    "prebuild": "run-p prepareAegir",
+    "build": "aegir build",
     "build-todo:docs": "aegir docs -p false",
-    "build:deps": "run-s gen",
-    "build:main": "aegir build",
-    "build:types": "aegir ts -p types",
+    "build:generated": "tsc-silent -p tsconfig.generated.json --suppress 6133@generated 6192@generated --stats",
+    "postbuild:generated": "cp-cli dist/dist.generated dist.generated",
+    "pretest": "tsc -p tsconfig.MockServerController.json",
     "test": "run-s test:*",
-    "test:browser": "aegir test --target browser",
-    "test:webworker": "aegir test --target webworker",
-    "test:electron": "aegir test --target electron-main",
-    "test:node": "aegir test --target node --cov && npx nyc report",
+    "test:node": "aegir test -t node --cov",
+    "test:chrome": "aegir test -t browser --cov",
+    "test:chrome-webworker": "aegir test -t webworker",
+    "test:firefox": "aegir test -t browser -- --browser firefox",
+    "test:firefox-webworker": "aegir test -t webworker -- --browser firefox",
+    "test:electron-main": "aegir test -t electron-main",
+    "posttest": "npx nyc report",
     "pregen": "openapi-generator-cli validate -i https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/v1.0.0/ipfs-pinning-service.yaml",
     "gen": "run-p gen:fetch",
-    "postgen": "tsc-silent -p tsconfig.generated.json --suppress 6133@generated 6192@generated --stats",
+    "postgen": "run-s build:generated",
     "gen:fetch": "openapi-generator-cli generate --generator-key fetch",
     "gen:node": "openapi-generator-cli generate --generator-key node",
-    "gen:ts": "openapi-generator-cli generate --generator-key ts"
+    "gen:ts": "openapi-generator-cli generate --generator-key ts",
+    "clean": "aegir clean",
+    "lint": "aegir lint"
   },
   "dependencies": {
     "fetch-ponyfill": "^7.1.0"
@@ -169,15 +185,20 @@
     "@swc/core": "^1.2.157",
     "@swc/helpers": "^0.3.3",
     "@types/cors": "^2.8.12",
+    "@types/eslint": "^8.4.2",
     "@types/express": "^4.17.13",
     "@types/mocha": "^9.1.0",
     "@types/node": "^17.0.21",
     "@types/portscanner": "^2.1.1",
-    "aegir": "^36.2.2",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "aegir": "^37.0.15",
     "check-aegir-project": "^1.0.3",
     "cors": "^2.8.5",
     "cp-cli": "^2.0.0",
     "dotenvrc": "^1.0.1",
+    "eslint": "^8.14.0",
+    "eslint-plugin-import": "^2.26.0",
     "express": "^4.17.3",
     "express-promise-router": "^4.1.1",
     "mock-ipfs-pinning-service": "^0.4.0",
@@ -186,16 +207,7 @@
     "regenerator-runtime": "^0.13.9",
     "ts-node": "^10.7.0",
     "tsc-silent": "^1.2.1",
+    "typescript": "^4.6.4",
     "winston": "^3.6.0"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/src/index.js",
-      "require": "./dist/src/index.js"
-    },
-    "./api/apis": {
-      "import": "./dist/dist.generated/apis",
-      "require": "./dist/dist.generated/apis"
-    }
   }
 }

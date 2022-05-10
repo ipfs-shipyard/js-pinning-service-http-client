@@ -147,7 +147,7 @@
   },
   "scripts": {
     "ci:test": "run-s test:*",
-    "dep-check": "aegir dep-check src/**/*.ts test/**/*.ts generated/**/*.ts",
+    "dep-check": "aegir dep-check dist/**/*.js -- --ignore @openapitools/openapi-generator-cli @typescript-eslint/eslint-plugin @typescript-eslint/parser",
     "fix": "run-s fix:*",
     "fix:lint": "aegir lint --fix",
     "release": "aegir release",

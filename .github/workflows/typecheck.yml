@@ -28,8 +28,8 @@ jobs:
           java-version: '17'
       - name: Install dependencies
         run: npm install
-      - name: Generate client from openapi spec
-        run: npm run gen
+      - name: Build generated client
+        run: npm run build:generated
       - name: Typecheck
         uses: gozala/typescript-error-reporter-action@v1.0.8
         with:

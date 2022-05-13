@@ -151,7 +151,6 @@
     "fix": "run-s fix:*",
     "fix:lint": "aegir lint --fix",
     "release": "aegir release",
-    "postinstall": "run-p prepareAegir",
     "prepareAegir": "run-p pretest build:generated",
     "prebuild": "run-p prepareAegir",
     "build": "aegir build",

@@ -1,3 +1,10 @@
+### [1.0.1](https://github.com/ipfs-shipyard/js-pinning-service-http-client/compare/v1.0.0...v1.0.1) (2022-05-13)
+
+
+### Bug Fixes
+
+* remove postinstall ([#15](https://github.com/ipfs-shipyard/js-pinning-service-http-client/issues/15)) ([9fc605f](https://github.com/ipfs-shipyard/js-pinning-service-http-client/commit/9fc605f69484ba0c40eead3ac0a974ae8eb3d85b))
+
 ## 1.0.0 (2022-05-10)
 
 

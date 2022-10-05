@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/ipfs-shipyard/js-pinning-service-http-client/compare/v1.0.2...v1.0.3) (2022-10-05)
+
+
+### Trivial Changes
+
+* **deps-dev:** bump @types/node from 17.0.45 to 18.8.2 ([#52](https://github.com/ipfs-shipyard/js-pinning-service-http-client/issues/52)) ([e6179fb](https://github.com/ipfs-shipyard/js-pinning-service-http-client/commit/e6179fb079b87a6dbe436b8c9e1398bfb1b56965))
+
 ## [1.0.2](https://github.com/ipfs-shipyard/js-pinning-service-http-client/compare/v1.0.1...v1.0.2) (2022-10-05)
 
 

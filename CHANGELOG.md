@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/ipfs-shipyard/js-pinning-service-http-client/compare/v1.0.1...v1.0.2) (2022-10-05)
+
+
+### Trivial Changes
+
+* **deps-dev:** bump @types/mocha from 9.1.1 to 10.0.0 ([#49](https://github.com/ipfs-shipyard/js-pinning-service-http-client/issues/49)) ([d7fd94b](https://github.com/ipfs-shipyard/js-pinning-service-http-client/commit/d7fd94bf3f474e6343ec9fbefae856fada3c1628))
+
 ### [1.0.1](https://github.com/ipfs-shipyard/js-pinning-service-http-client/compare/v1.0.0...v1.0.1) (2022-05-13)
 
 

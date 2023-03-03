@@ -192,7 +192,7 @@
     "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
-    "aegir": "^37.0.15",
+    "aegir": "^38.1.7",
     "check-aegir-project": "^1.0.3",
     "cors": "^2.8.5",
     "cp-cli": "^2.0.0",

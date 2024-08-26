@@ -1,12 +1,7 @@
-import fetchPonyfill from 'fetch-ponyfill'
-
 import { expect } from 'aegir/chai'
-
 import { MockServerController } from '../MockServerController.js'
 
-const { fetch } = fetchPonyfill()
-
-export default async (setup: () => Promise<unknown>) => {
+export default async (setup: () => Promise<unknown>): Promise<void> => {
   describe.skip('MockServerController', () => {
     it('can start and stop without errors', async () => {
       expect(async () => {
@@ -17,14 +12,13 @@ export default async (setup: () => Promise<unknown>) => {
 
     it('Can start multiple mockServers', async () => {
       const controller = new MockServerController()
-      const serverConfigs: Array<{basePath: string}> = []
+      const serverConfigs: Array<{ basePath: string }> = []
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      for await (const _ of Array(5)) {
+      await Promise.all(Array(5).fill(0).map(async () => {
         const response = await fetch('http://localhost:3000/start')
         serverConfigs.push(await response.json())
-      }
-      // it('Can shutdown those mockServers', async () => {
+      }))
+
       for await (const config of serverConfigs) {
         const { basePath } = config
         const [,, port] = basePath

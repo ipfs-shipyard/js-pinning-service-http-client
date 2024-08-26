@@ -58,12 +58,6 @@
       "require": "./dist/dist.generated/apis"
     }
   },
-  "eslintConfig": {
-    "extends": "ipfs",
-    "parserOptions": {
-      "sourceType": "module"
-    }
-  },
   "release": {
     "branches": [
       "main"
@@ -147,7 +141,7 @@
   },
   "scripts": {
     "ci:test": "run-s test:*",
-    "dep-check": "aegir dep-check dist/**/*.js -- --ignore @openapitools/openapi-generator-cli @typescript-eslint/eslint-plugin @typescript-eslint/parser",
+    "dep-check": "aegir dep-check dist/**/*.js",
     "fix": "run-s fix:*",
     "fix:lint": "aegir lint --fix",
     "release": "aegir release",
@@ -165,7 +159,7 @@
     "test:firefox": "aegir test -t browser -- --browser firefox",
     "test:firefox-webworker": "aegir test -t webworker -- --browser firefox",
     "test:electron-main": "aegir test -t electron-main",
-    "posttest": "npx nyc report",
+    "posttest": "npx nyc report || echo 'coverage report temporarily broken'",
     "pregen": "openapi-generator-cli validate -i https://raw.githubusercontent.com/ipfs/pinning-services-api-spec/v1.0.0/ipfs-pinning-service.yaml",
     "gen": "run-p gen:fetch",
     "postgen": "run-s build:generated",
@@ -173,41 +167,31 @@
     "gen:node": "openapi-generator-cli generate --generator-key node",
     "gen:ts": "openapi-generator-cli generate --generator-key ts",
     "clean": "aegir clean",
+    "reset": "aegir clean node_modules dist dist.generated",
     "lint": "aegir lint"
   },
-  "dependencies": {
-    "fetch-ponyfill": "^7.1.0"
-  },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.4.26",
-    "@swc/cli": "^0.1.55",
-    "@swc/core": "^1.2.157",
-    "@swc/helpers": "^0.3.3",
-    "@types/cors": "^2.8.12",
-    "@types/eslint": "^8.4.2",
-    "@types/express": "^4.17.13",
-    "@types/mocha": "^10.0.0",
-    "@types/node": "^18.8.2",
-    "@types/portscanner": "^2.1.1",
+    "@openapitools/openapi-generator-cli": "^2.13.5",
+    "@swc/cli": "^0.4.0",
+    "@swc/core": "^1.7.18",
+    "@swc/helpers": "^0.5.12",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "^22.5.0",
+    "@types/portscanner": "^2.1.4",
     "@types/winston": "^2.4.4",
-    "@typescript-eslint/eslint-plugin": "^5.22.0",
-    "@typescript-eslint/parser": "^5.22.0",
-    "aegir": "^44.1.1",
-    "check-aegir-project": "^1.0.3",
+    "aegir": "^43.0.3",
     "cors": "^2.8.5",
     "cp-cli": "^2.0.0",
     "dotenvrc": "^1.0.1",
-    "eslint": "^8.14.0",
-    "eslint-plugin-import": "^2.26.0",
-    "express": "^4.17.3",
+    "express": "^4.19.2",
     "express-promise-router": "^4.1.1",
-    "mock-ipfs-pinning-service": "^0.4.0",
+    "mock-ipfs-pinning-service": "^0.4.2",
     "npm-run-all": "^4.1.5",
     "portscanner": "^2.2.0",
-    "regenerator-runtime": "^0.13.9",
-    "ts-node": "^10.7.0",
-    "tsc-silent": "^1.2.1",
-    "typescript": "^5.5.4",
-    "winston": "^3.6.0"
+    "regenerator-runtime": "^0.14.1",
+    "tsc-silent": "^1.2.2",
+    "winston": "^3.14.2"
   }
 }

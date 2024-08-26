@@ -14,7 +14,7 @@
     "test/**/*.ts",
     "types/**/*.d.ts",
     "dist/dist.generated"
-, "config"  ],
+  ],
   "exclude": [
     "generated",
     "dist.test",

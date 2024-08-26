@@ -20,7 +20,7 @@ import type { PinsGetRequest, PinResults } from '@ipfs-shipyard/pinning-service-
 const config = new Configuration({
   endpointUrl, // the URI for your pinning provider, e.g. `http://localhost:3000`
   accessToken, // the secret token/key given to you by your pinning provider
-  // fetchApi: fetch, // You can pass your own fetchApi implementation, but we use fetch-ponyfill by default.
+  // fetchApi: fetch, // You can pass your own fetchApi implementation, but we use NodeJS fetch by default.
 })
 
 const client = new RemotePinningServiceClient(config)

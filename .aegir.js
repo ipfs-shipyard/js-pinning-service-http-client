@@ -1,14 +1,32 @@
-import { MockServerController } from './dist/test/MockServerController.js'
 
 /** @type {import('aegir').PartialOptions} */
-const config = {
+export default {
+  typescript: true,
+  dependencyCheck: {
+    ignore: [
+      '@swc/cli',
+      '@swc/core',
+      '@swc/helpers',
+      'cors',
+      'dotenvrc',
+      'express',
+      'express-promise-router',
+      'mock-ipfs-pinning-service',
+      'portscanner',
+      'regenerator-runtime',
+      'winston',
+    ]
+  },
   docs: {
     publish: true,
     entryPoint: './'
   },
   build: {
+    types: true,
     config: {
-      platform: 'node'
+      format: 'esm',
+      platform: 'node',
+      external: ['electron', '#ansi-styles', 'yargs/yargs', '#supports-color']
     },
     bundlesizeMax: '44KB'
   },
@@ -17,6 +35,7 @@ const config = {
     progress: true,
     cov: false,
     async before () {
+      const { MockServerController } = await import('./dist/test/MockServerController.js')
       return {
         env: {
           MOCK_PINNING_SERVER_SECRET: 'ci',
@@ -26,12 +45,10 @@ const config = {
     },
     /**
      * @param {import('aegir').GlobalOptions & import('aegir').TestOptions} _
-     * @param { {controller: MockServerController} } beforeResult
+     * @param { { controller: import('./test/MockServerController.js').MockServerController } } beforeResult
      */
     async after (_, {controller}) {
       await controller.shutdown()
     }
   }
 }
-
-export default config

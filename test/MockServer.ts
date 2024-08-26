@@ -1,14 +1,12 @@
+import cors from 'cors'
+import { setup } from 'mock-ipfs-pinning-service'
+import portscanner from 'portscanner'
+import { logger } from './logger.js'
 import type { Application } from 'express'
 import type { Server } from 'http'
-import portscanner from 'portscanner'
-import cors from 'cors'
-
-import { setup } from 'mock-ipfs-pinning-service'
-
-import { logger } from './logger.js'
 
 try {
-  import('dotenvrc')
+  await import('dotenvrc')
 } catch (err) {
   // no dotenvrc.. that's okay
   // eslint-disable-next-line no-console
@@ -23,7 +21,7 @@ export class MockServer {
 
   public basePath: string = ''
 
-  constructor (private readonly config: Parameters<typeof import('mock-ipfs-pinning-service')['setup']>[0] = { token: process.env.MOCK_PINNING_SERVER_SECRET }) {
+  constructor (private readonly config: Parameters<typeof setup>[0] = { token: process.env.MOCK_PINNING_SERVER_SECRET }) {
     process.on('uncaughtException', MockServer.onEADDRINUSE)
   }
 
@@ -84,14 +82,16 @@ export class MockServer {
    * Ensure the port set for this instance is not already in use by another MockServer
    */
   private async getAvailablePort (): Promise<string> {
-    return await new Promise((resolve, reject) => portscanner.findAPortNotInUse(3000, 3099, '127.0.0.1', (error, port) => {
-      if (error != null) {
-        return reject(error)
-      }
-      this.port = port.toString()
-      this.setBasePath()
-      resolve(this.port)
-    }))
+    return new Promise((resolve, reject) => {
+      portscanner.findAPortNotInUse(3000, 3099, '127.0.0.1', (error, port) => {
+        if (error != null) {
+          reject(error); return
+        }
+        this.port = port.toString()
+        this.setBasePath()
+        resolve(this.port)
+      })
+    })
   }
 
   private async service (): Promise<Application> {
@@ -133,7 +133,7 @@ export class MockServer {
     })
   }
 
-  private static onEADDRINUSE (err: Error & { code: string }) {
+  private static onEADDRINUSE (err: Error & { code: string }): void {
     if (err.code === 'EADDRINUSE') {
       logger.error('Unexpected conflict with port usage')
     } else {

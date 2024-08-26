@@ -1,10 +1,8 @@
-import fetchPonyfill from 'fetch-ponyfill'
-
+import { PinsApi as RemotePinningServiceClient } from '../dist.generated/apis/index.js'
 import { Configuration as GeneratedConfiguration } from '../dist.generated/index.js'
 import type { ConfigurationParameters as GeneratedConfigurationParameters } from '../dist.generated/index.js'
-import { PinsApi as RemotePinningServiceClient } from '../dist.generated/apis/index.js'
 
-interface ConfigurationParameters extends Omit<GeneratedConfigurationParameters, 'basePath'>{
+interface ConfigurationParameters extends Omit<GeneratedConfigurationParameters, 'basePath'> {
   endpointUrl?: string
 }
 class Configuration extends GeneratedConfiguration {
@@ -14,7 +12,7 @@ class Configuration extends GeneratedConfiguration {
      * Prevent the need for everyone to have to override the fetch API...
      */
     if (options.fetchApi == null) {
-      finalOptions.fetchApi = fetchPonyfill().fetch
+      finalOptions.fetchApi = fetch
     }
 
     // @see https://github.com/ipfs-shipyard/js-pinning-service-http-client/issues/3

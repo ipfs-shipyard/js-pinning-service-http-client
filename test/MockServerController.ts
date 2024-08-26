@@ -1,9 +1,9 @@
+import cors from 'cors'
 import express from 'express'
 import Router from 'express-promise-router'
-import cors from 'cors'
-
 import { MockServer } from './MockServer.js'
 import { logger } from './logger.js'
+import type { Server } from 'http'
 
 /**
  * MockServerController stands up a server on port 3000
@@ -14,11 +14,12 @@ class MockServerController {
   private readonly router = Router()
 
   private readonly port = 3000
-  server: import('http').Server
+  server: Server
   constructor () {
     this.shutdown.bind(this)
     this.shutdownSync.bind(this)
-    this.router.get<'/start', {port?: string}>('/start', async (req, res, next) => { // eslint-disable-line @typescript-eslint/no-misused-promises
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    this.router.get<'/start', { port?: string }>('/start', async (req, res, next) => {
       logger.debug('MockServerController: /start GET request received')
       const { port } = req.params
 
@@ -44,7 +45,8 @@ class MockServerController {
     /**
      * A client will request to shut down it's mockServer by port, which it should have received upon calling '/start'
      */
-    this.router.get<'/stop/:port', {port: string}>('/stop/:port', async (req, res, next) => { // eslint-disable-line @typescript-eslint/no-misused-promises
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    this.router.get<'/stop/:port', { port: string }>('/stop/:port', async (req, res, next) => {
       const { port } = req.params
       logger.debug(`MockServerController: /stop/${port.toString()} GET request received`)
 
@@ -82,13 +84,13 @@ class MockServerController {
     })
   }
 
-  private shutdownSync () {
+  private shutdownSync (): void {
     this.shutdown().catch((err) => {
       logger.error(err)
     })
   }
 
-  async shutdown () {
+  async shutdown (): Promise<void> {
     // To prevent duplicated cleanup, remove the process listeners on server close.
     process.off('beforeExit', this.shutdownSync)
     process.off('SIGTERM', this.shutdownSync)
@@ -115,7 +117,7 @@ class MockServerController {
     }
   }
 
-  private async startIpfsPinningServer (port?: string) {
+  private async startIpfsPinningServer (port?: string): Promise<MockServer> {
     const mockServer = new MockServer({
       token: process.env.MOCK_PINNING_SERVER_SECRET
     })

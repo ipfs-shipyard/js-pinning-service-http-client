@@ -1,8 +1,10 @@
 {
   "root": true,
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "import"],
   "extends": ["ipfs"],
+  "parserOptions": {
+    "project": true,
+    "sourceType": "module"
+  },
   "overrides": [
     {
       "parserOptions": {
@@ -13,7 +15,6 @@
         "./types/**/*.ts"
       ],
       "rules": {
-        "@typescript-eslint/strict-boolean-expressions": "off"
       }
     },
     {
@@ -32,8 +33,7 @@
         "semi": "off",
         "indent": "off",
         "no-unused-vars": "off",
-        "no-undef": "off",
-        "@typescript-eslint/strict-boolean-expressions": "off"
+        "no-undef": "off"
       }
     }
   ],

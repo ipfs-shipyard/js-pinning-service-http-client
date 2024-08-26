@@ -49,6 +49,12 @@ npm install
 npm run build
 ```
 
+### Updating the generated client
+
+To update the client, you need to `npm run gen` npm script. This will fetch the latest version of the OpenAPI spec and generate the client. However, openapi-generator-cli does not currently generate the client code with proper import syntax. So you must modify the imports in `generated/fetch/**` directly, or just `git checkout -p` to remove the invalid import path changes.
+
+If you need to modify the generated code's import paths, you will have to run `npm run postgen` manually.
+
 ### Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).

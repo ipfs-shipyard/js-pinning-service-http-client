@@ -1,12 +1,7 @@
 /* eslint-env browser, node, mocha */
-import fetchPonyfill from 'fetch-ponyfill'
-
 import { expect } from 'aegir/chai'
-
 import { Configuration, RemotePinningServiceClient, Status } from '../src/index.js'
 import type { Pin } from '../src/index.js'
-
-const { fetch } = fetchPonyfill()
 
 let Config = new Configuration({
   endpointUrl: 'http://127.0.0.1:3000',

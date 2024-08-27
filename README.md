@@ -20,7 +20,7 @@ import type { PinsGetRequest, PinResults } from '@ipfs-shipyard/pinning-service-
 const config = new Configuration({
   endpointUrl, // the URI for your pinning provider, e.g. `http://localhost:3000`
   accessToken, // the secret token/key given to you by your pinning provider
-  // fetchApi: fetch, // You can pass your own fetchApi implementation, but we use fetch-ponyfill by default.
+  // fetchApi: fetch, // You can pass your own fetchApi implementation, but we use NodeJS fetch by default.
 })
 
 const client = new RemotePinningServiceClient(config)
@@ -48,6 +48,12 @@ To build and compile the typescript sources to javascript use:
 npm install
 npm run build
 ```
+
+### Updating the generated client
+
+To update the client, you need to `npm run gen` npm script. This will fetch the latest version of the OpenAPI spec and generate the client. However, openapi-generator-cli does not currently generate the client code with proper import syntax. So you must modify the imports in `generated/fetch/**` directly, or just `git checkout -p` to remove the invalid import path changes.
+
+If you need to modify the generated code's import paths, you will have to run `npm run postgen` manually.
 
 ### Contributing
 

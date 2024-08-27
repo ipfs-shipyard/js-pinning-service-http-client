@@ -1,3 +1,13 @@
+## [2.0.0](https://github.com/ipfs-shipyard/js-pinning-service-http-client/compare/v1.0.3...v2.0.0) (2024-08-27)
+
+### ⚠ BREAKING CHANGES
+
+* use native fetch & update deps (#68)
+
+### Features
+
+* use native fetch & update deps ([#68](https://github.com/ipfs-shipyard/js-pinning-service-http-client/issues/68)) ([77dac71](https://github.com/ipfs-shipyard/js-pinning-service-http-client/commit/77dac71e1bd9bf7280249e078c8c8cc1dc5e2fcb))
+
 ## [1.0.3](https://github.com/ipfs-shipyard/js-pinning-service-http-client/compare/v1.0.2...v1.0.3) (2022-10-05)
 
 

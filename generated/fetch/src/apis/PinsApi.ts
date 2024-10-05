@@ -36,10 +36,10 @@ import {
 } from '../models/index.js';
 
 export interface PinsGetRequest {
-    cid?: Set<string>;
+    cid?: Array<string>;
     name?: string;
     match?: TextMatchingStrategy;
-    status?: Set<Status>;
+    status?: Array<Status>;
     before?: Date;
     after?: Date;
     limit?: number;
@@ -73,10 +73,10 @@ export interface PinsApiInterface {
     /**
      * List all the pin objects, matching optional filters; when no filter is provided, only successful pins are returned
      * @summary List pin objects
-     * @param {Set<string>} [cid] Return pin objects responsible for pinning the specified CID(s); be aware that using longer hash functions introduces further constraints on the number of CIDs that will fit under the limit of 2000 characters per URL  in browser contexts
+     * @param {Array<string>} [cid] Return pin objects responsible for pinning the specified CID(s); be aware that using longer hash functions introduces further constraints on the number of CIDs that will fit under the limit of 2000 characters per URL  in browser contexts
      * @param {string} [name] Return pin objects with specified name (by default a case-sensitive, exact match)
      * @param {TextMatchingStrategy} [match] Customize the text matching strategy applied when name filter is present
-     * @param {Set<Status>} [status] Return pin objects for pins with the specified status
+     * @param {Array<Status>} [status] Return pin objects for pins with the specified status
      * @param {Date} [before] Return results created (queued) before provided timestamp
      * @param {Date} [after] Return results created (queued) after provided timestamp
      * @param {number} [limit] Max records to return
@@ -173,7 +173,7 @@ export class PinsApi extends runtime.BaseAPI implements PinsApiInterface {
         const queryParameters: any = {};
 
         if (requestParameters.cid) {
-            queryParameters['cid'] = Array.from(requestParameters.cid).join(runtime.COLLECTION_FORMATS["csv"]);
+            queryParameters['cid'] = requestParameters.cid.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters.name !== undefined) {
@@ -185,7 +185,7 @@ export class PinsApi extends runtime.BaseAPI implements PinsApiInterface {
         }
 
         if (requestParameters.status) {
-            queryParameters['status'] = Array.from(requestParameters.status).join(runtime.COLLECTION_FORMATS["csv"]);
+            queryParameters['status'] = requestParameters.status.join(runtime.COLLECTION_FORMATS["csv"]);
         }
 
         if (requestParameters.before !== undefined) {

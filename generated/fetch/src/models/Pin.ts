@@ -33,10 +33,10 @@ export interface Pin {
     name?: string;
     /**
      * Optional list of multiaddrs known to provide the data
-     * @type {Set<string>}
+     * @type {Array<string>}
      * @memberof Pin
      */
-    origins?: Set<string>;
+    origins?: Array<string>;
     /**
      * Optional metadata for pin object
      * @type {{ [key: string]: string; }}

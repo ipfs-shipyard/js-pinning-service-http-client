@@ -38,8 +38,8 @@ describe('Client', () => {
 
     it('GET: Can get failed Pins', async () => {
       const Client = new RemotePinningServiceClient(Config)
-      const response = await Client.pinsGet({ limit: 1, status: new Set([Status.Failed]) })
-      expect(response).to.deep.eq({ count: 0, results: new Set() })
+      const response = await Client.pinsGet({ limit: 1, status: [Status.Failed] })
+      expect(response).to.deep.eq({ count: 0, results: [] })
     })
 
     it('GET: Can add a Pin successfully', async () => {

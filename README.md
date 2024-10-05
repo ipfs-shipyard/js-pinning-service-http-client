@@ -29,7 +29,7 @@ const client = new RemotePinningServiceClient(config)
   // Get 10 failed Pins
   const pinsGetOptions: PinsGetRequest = {
     limit: 10,
-    status: new Set([Status.Failed]) // requires a set, and not an array
+    status: [Status.Failed]
   }
   const {count, results}: PinResults = await client.pinsGet(pinsGetOptions)
 
@@ -52,6 +52,8 @@ npm run build
 ### Updating the generated client
 
 To update the client, you need to `npm run gen` npm script. This will fetch the latest version of the OpenAPI spec and generate the client. However, openapi-generator-cli does not currently generate the client code with proper import syntax. So you must modify the imports in `generated/fetch/**` directly, or just `git checkout -p` to remove the invalid import path changes.
+
+It also uses `Set`s for all collection types though it cannot serialize or deserialize these types to/from JSON. They must be manually changed to be `Array`s.
 
 If you need to modify the generated code's import paths, you will have to run `npm run postgen` manually.
 

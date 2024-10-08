@@ -58,10 +58,10 @@ export interface PinStatus {
     pin: Pin;
     /**
      * List of multiaddrs designated by pinning service for transferring any new data from external peers
-     * @type {Set<string>}
+     * @type {Array<string>}
      * @memberof PinStatus
      */
-    delegates: Set<string>;
+    delegates: Array<string>;
     /**
      * Optional info for PinStatus response
      * @type {{ [key: string]: string; }}

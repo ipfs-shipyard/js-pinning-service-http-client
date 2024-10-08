@@ -34,10 +34,10 @@ export interface PinResults {
     count: number;
     /**
      * An array of PinStatus results
-     * @type {Set<PinStatus>}
+     * @type {Array<PinStatus>}
      * @memberof PinResults
      */
-    results: Set<PinStatus>;
+    results: Array<PinStatus>;
 }
 
 export function PinResultsFromJSON(json: any): PinResults {
@@ -51,7 +51,7 @@ export function PinResultsFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     return {
         
         'count': json['count'],
-        'results': (new Set((json['results'] as Array<any>).map(PinStatusFromJSON))),
+        'results': ((json['results'] as Array<any>).map(PinStatusFromJSON)),
     };
 }
 
@@ -65,7 +65,7 @@ export function PinResultsToJSON(value?: PinResults | null): any {
     return {
         
         'count': value.count,
-        'results': (Array.from(value.results as Set<any>).map(PinStatusToJSON)),
+        'results': ((value.results as Array<any>).map(PinStatusToJSON)),
     };
 }
 

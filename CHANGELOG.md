@@ -1,3 +1,13 @@
+## [3.0.0](https://github.com/ipfs-shipyard/js-pinning-service-http-client/compare/v2.0.0...v3.0.0) (2024-10-08)
+
+### ⚠ BREAKING CHANGES
+
+* fields that were Sets such as `PinResults.results` and `PinsGetRequest.cid` are now Arrays
+
+### Bug Fixes
+
+* use arrays for collections instead of sets ([#70](https://github.com/ipfs-shipyard/js-pinning-service-http-client/issues/70)) ([75736f5](https://github.com/ipfs-shipyard/js-pinning-service-http-client/commit/75736f57880dfd91244c0a2146593d6a91b9767a)), closes [/github.com/ipfs/helia-remote-pinning/blob/main/src/heliaRemotePinner.ts#L155](https://github.com/ipfs-shipyard//github.com/ipfs/helia-remote-pinning/blob/main/src/heliaRemotePinner.ts/issues/L155)
+
 ## [2.0.0](https://github.com/ipfs-shipyard/js-pinning-service-http-client/compare/v1.0.3...v2.0.0) (2024-08-27)
 
 ### ⚠ BREAKING CHANGES

@@ -178,7 +178,7 @@
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/mocha": "^10.0.7",
-    "@types/node": "^22.5.0",
+    "@types/node": "^25.0.6",
     "@types/portscanner": "^2.1.4",
     "@types/winston": "^2.4.4",
     "aegir": "^45.0.9",
